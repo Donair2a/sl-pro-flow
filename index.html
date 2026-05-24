@@ -3,11 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SL PROFLOW | Studio Gold 1.3.18</title>
+    <title>SL PROFLOW | Studio Gold 1.4.0</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='black'/%3E%3Cg fill='%23c9a050'%3E%3Crect x='15' y='25' width='60' height='8' rx='2'/%3E%3Crect x='15' y='46' width='40' height='8' rx='2'/%3E%3Crect x='15' y='67' width='70' height='8' rx='2'/%3E%3C/g%3E%3C/svg%3E">
 
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Pill toggle switch layout */
+        .lang-switch-pill {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2px;
+            width: 74px;
+            height: 28px;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 12px;
+            box-sizing: border-box;
+        }
+        .lang-option {
+            flex: 1;
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            z-index: 2;
+            transition: color 0.25s ease;
+            line-height: 22px;
+        }
+        .lang-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 33px;
+            height: 22px;
+            background: var(--accent);
+            border-radius: 15px;
+            z-index: 1;
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        html[data-ui-lang="EN"] .lang-slider { transform: translateX(35px); }
+        html[data-ui-lang="FR"] .lang-option.opt-fr,
+        html[data-ui-lang="EN"] .lang-option.opt-en { color: #000000 !important; }
+
+        /* Guide styling */
+        .qa-item {
+            background: rgba(201,160,80,0.1);
+            border: 1px solid rgba(201,160,80,0.3);
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            margin-bottom: 5px;
+        }
+        .qa-item:hover { background: rgba(201,160,80,0.2); }
+        .qa-ans {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 0 0 8px 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--accent);
+        }
+    </style>
 </head>
 <body>
 
@@ -20,26 +87,33 @@
     </div>
     <div class="nav-group-right">
         <button class="btn-help" onclick="toggleOverlay('help-overlay')">?</button>
-        <div id="nav-config" class="nav-link" onclick="showMainTab('tab-config', this)">Profil</div>
+        
+        <div class="lang-switch-pill" onclick="toggleAppLanguage()">
+            <div class="lang-slider"></div>
+            <div class="lang-option opt-fr">FR</div>
+            <div class="lang-option opt-en">EN</div>
+        </div>
+
+        <div id="nav-config" class="nav-link" onclick="showMainTab('tab-config', this)">Tableau de bord</div>
         <button onclick="toggleTheme()" style="background:none; border:1px solid var(--border); color:var(--accent); cursor:pointer; border-radius:50%; width:32px; height:32px;">◐</button>
     </div>
 </nav>
 
 <div class="layout-main">
     <div class="sidebar">
-        <button class="sidebar-btn active" onclick="sidebarNavigate('block-intro', this)">📸 Titre & Musique</button>
-        <button class="sidebar-btn" onclick="sidebarNavigate('block-style', this)">✨ Style</button>
-        <button class="sidebar-btn" onclick="sidebarNavigate('block-decors', this)">🏠 Décors</button>
-        <button class="sidebar-btn" onclick="sidebarNavigate('block-post', this)">🎨 Technique</button>
-        <button class="sidebar-btn" onclick="sidebarNavigate('block-tags', this)">🏷️ Tags</button>
-        <button class="sidebar-btn btn-clear" onclick="clearForm()">🗑️ Vider le post</button>
+        <button id="side-btn-intro" class="sidebar-btn active" onclick="sidebarNavigate('block-intro', this)">📸 Titre & Musique</button>
+        <button id="side-btn-style" class="sidebar-btn" onclick="sidebarNavigate('block-style', this)">✨ Style</button>
+        <button id="side-btn-decors" class="sidebar-btn" onclick="sidebarNavigate('block-decors', this)">🏠 Décors</button>
+        <button id="side-btn-post" class="sidebar-btn" onclick="sidebarNavigate('block-post', this)">🎨 Technique</button>
+        <button id="side-btn-tags" class="sidebar-btn" onclick="sidebarNavigate('block-tags', this)">🏷️ Tags</button>
+        <button id="side-btn-clear" class="sidebar-btn btn-clear" onclick="clearForm()">✨ Nouveau</button>
     </div>
 
     <div class="content-container">
         <div class="scrollable-content">
             <div id="tab-editor" class="tab-content active">
                 <div id="block-intro" class="editor-block active card">
-                    <h2>📸 Titre & Musique</h2>
+                    <h2 id="title-intro">📸 Titre & Musique</h2>
                     <input type="text" id="titre" placeholder="Titre..." oninput="update()">
                     <input type="text" id="mood" placeholder="Citation..." oninput="update()">
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
@@ -49,23 +123,23 @@
                 </div>
 
                 <div id="block-style" class="editor-block card">
-                    <h2>✨ Style</h2>
+                    <h2 id="title-style">✨ Style</h2>
                     <div id="style-container"></div>
-                    <button class="btn-outline" onclick="addDynamicRowFromStorage('style', 'Outfit')">＋ Ajouter un élément</button>
+                    <button id="btn-add-style" class="btn-outline" onclick="addDynamicRowFromStorage('style', 'Outfit')"><span class="btn-add-txt">＋ Ajouter un élément</span></button>
                 </div>
 
                 <div id="block-decors" class="editor-block card">
-                    <h2>🏠 Décors</h2>
+                    <h2 id="title-decors">🏠 Décors</h2>
                     <div id="decors-container"></div>
-                    <button class="btn-outline" onclick="addDynamicRowFromStorage('decors', 'Backdrop')">＋ Ajouter un élément</button>
+                    <button id="btn-add-decors" class="btn-outline" onclick="addDynamicRowFromStorage('decors', 'Backdrop')"><span class="btn-add-txt">＋ Ajouter un élément</span></button>
                 </div>
 
                 <div id="block-post" class="editor-block card">
-                    <h2>🎨 Technique</h2>
+                    <h2 id="title-tech">🎨 Technique</h2>
                     <div class="tech-container">
                         <div class="tech-column">
-                            <div class="tech-label-header">Viewer</div>
-                            <label class="radio-item"><input type="radio" name="vi" value="" checked onclick="update()"> Aucun</label>
+                            <div class="tech-label-header" id="header-viewer">Viewer</div>
+                            <label class="radio-item"><input type="radio" name="vi" value="" checked onclick="update()"> <span id="lbl-vi-none">Aucun</span></label>
                             <label class="radio-item"><input type="radio" name="vi" value="BlackDragon" onclick="update()"> BlackDragon</label>
                             <label class="radio-item"><input type="radio" name="vi" value="Firestorm" onclick="update()"> Firestorm</label>
                             <label class="radio-item"><input type="radio" name="vi" value="Alchemy" onclick="update()"> Alchemy</label>
@@ -73,8 +147,8 @@
                             <label class="radio-item"><input type="radio" name="vi" value="SL Official" onclick="update()"> SL Official</label>
                         </div>
                         <div class="tech-column">
-                            <div class="tech-label-header">Logiciel Retouche</div>
-                            <label class="radio-item"><input type="radio" name="soft" value="" checked onclick="update()"> Aucun</label>
+                            <div class="tech-label-header" id="header-software">Logiciel Retouche</div>
+                            <label class="radio-item"><input type="radio" name="soft" value="" checked onclick="update()"> <span id="lbl-soft-none">Aucun</span></label>
                             <label class="radio-item"><input type="radio" name="soft" value="Photoshop" onclick="update()"> Photoshop</label>
                             <label class="radio-item"><input type="radio" name="soft" value="Lightroom" onclick="update()"> Lightroom</label>
                             <label class="radio-item"><input type="radio" name="soft" value="Topaz Labs" onclick="update()"> Topaz Labs</label>
@@ -86,11 +160,11 @@
                 </div>
 
                 <div id="block-tags" class="editor-block card">
-                    <h2>🏷️ Tags</h2>
+                    <h2 id="title-tags">🏷️ Tags</h2>
                     <textarea id="tags-manual" rows="2" placeholder="Tags séparés par virgules..." oninput="update()"></textarea>
-                    <label>Tags permanents (Profil)</label>
+                    <label id="lbl-perm-tags">Tags permanents (Tableau de bord)</label>
                     <div id="tags-permanent-display" style="font-size:0.75rem; opacity:0.6; padding:10px; background:rgba(0,0,0,0.1); border-radius:8px; margin-bottom:15px;"></div>
-                    <label>Auto-tags suggérés</label>
+                    <label id="lbl-auto-tags">Auto-tags suggérés</label>
                     <div id="auto-tags-display" style="font-size:0.75rem; color:var(--accent); background:rgba(201,160,80,0.15); padding:12px; border-radius:10px;"></div>
                 </div>
             </div>
@@ -98,19 +172,19 @@
             <div id="tab-sponsors" class="tab-content">
                 <div style="display: grid; grid-template-columns: 1fr 2px 1fr; gap: 0;">
                     <div style="padding: 0 20px;">
-                        <h2>🏢 Sponsors <button class="btn-maint" style="float:right" onclick="toggleQA('q-spons')">＋</button></h2>
+                        <h2>🏢 <span id="title-spons-list">Sponsors</span> <button class="btn-maint" style="float:right" onclick="toggleQA('q-spons')">＋</button></h2>
                         <div id="q-spons" style="display:none" class="dynamic-row">
                             <input type="text" id="qs-n" placeholder="Nom Boutique..."><input type="text" id="qs-m" placeholder="Manager..."><input type="text" id="qs-l" placeholder="SLURL (Séparez par | pour plusieurs adresses)...">
-                            <button class="btn-gold" style="width:100%" onclick="saveQuick('spons')">Enregistrer</button>
+                            <button class="btn-gold" style="width:100%" id="btn-qs-save" onclick="saveQuick('spons')">Enregistrer</button>
                         </div>
                         <div id="list-sponsors" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px;"></div>
                     </div>
                     <div style="background: linear-gradient(to bottom, transparent, var(--accent), transparent); width: 2px; opacity: 0.5;"></div>
                     <div style="padding: 0 20px;">
-                        <h2>🎪 Events <button class="btn-maint" style="float:right" onclick="toggleQA('q-ev')">＋</button></h2>
+                        <h2>🎪 <span id="title-ev-list">Events</span> <button class="btn-maint" style="float:right" onclick="toggleQA('q-ev')">＋</button></h2>
                         <div id="q-ev" style="display:none" class="dynamic-row">
                             <input type="text" id="qe-n" placeholder="Nom Event..."><input type="text" id="qe-l" placeholder="SLURL/Lien...">
-                            <button class="btn-gold" style="width:100%" onclick="saveQuick('ev')">Enregistrer</button>
+                            <button class="btn-gold" style="width:100%" id="btn-qe-save" onclick="saveQuick('ev')">Enregistrer</button>
                         </div>
                         <div id="list-events" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px;"></div>
                     </div>
@@ -119,10 +193,10 @@
 
             <div id="tab-deadlines" class="tab-content">
                 <div class="card">
-                    <h2>⏳ Deadlines</h2>
-                    <div style="display:flex; gap:15px; align-items:flex-end;">
+                    <h2 id="title-add-dl">⏳ Deadlines</h2>
+                    <div style="display:flex; gap:15px; align-items:center; margin-top:10px;">
                         <input type="text" id="dl-name" style="flex:1" placeholder="Marque..."><input type="date" id="dl-date" style="flex:0.5">
-                        <button class="btn-gold" onclick="addDeadline()">Ajouter</button>
+                        <button class="btn-gold" id="btn-add-dl" style="height: 35px; padding: 0 20px; align-self: center;" onclick="addDeadline()">Ajouter</button>
                     </div>
                 </div>
                 <div id="list-deadlines" style="display:flex; flex-direction:column; gap:10px;"></div>
@@ -130,7 +204,7 @@
 
             <div id="tab-config" class="tab-content">
                 <div class="card">
-                    <h2>💎 Profil & Réseaux</h2>
+                    <h2 id="title-config-social">💎 Tableau de bord & Réseaux</h2>
                     <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">
                         <input type="text" id="cfg-f" placeholder="Flickr (URL)" oninput="saveCfg()">
                         <input type="text" id="cfg-p" placeholder="Primfeed (URL)" oninput="saveCfg()">
@@ -139,34 +213,34 @@
                         <input type="text" id="cfg-x" placeholder="X (URL)" oninput="saveCfg()">
                         <input type="text" id="cfg-tk" placeholder="TikTok (URL)" oninput="saveCfg()">
                     </div>
-                    <label>Tags par défaut (permanents)</label>
+                    <label id="lbl-cfg-tags">Tags par défaut (permanents)</label>
                     <textarea id="cfg-tags" rows="3" oninput="saveCfg()"></textarea>
                 </div>
 
                 <div class="card">
-                    <h2>🎨 Personnalisation des Catégories</h2>
+                    <h2 id="title-config-cats">🎨 Personnalisation des Catégories</h2>
                     <div id="list-custom-cats" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;"></div>
                     <div style="display:grid; grid-template-columns: 1fr 1fr 0.5fr 1fr; gap:10px; align-items: flex-end;">
-                        <div><label>Nom (Français)</label><input type="text" id="new-cat-id" placeholder="Ex: Fauteuil..."></div>
-                        <div><label>Traduction (Anglais)</label><input type="text" id="new-cat-en" placeholder="Ex: Armchair..."></div>
-                        <div><label>Émoji</label><input type="text" id="new-cat-emo" placeholder="🪑"></div>
+                        <div><label id="lbl-cat-fr">Nom (Français)</label><input type="text" id="new-cat-id" placeholder="Ex: Fauteuil..."></div>
+                        <div><label id="lbl-cat-en">Traduction (Anglais)</label><input type="text" id="new-cat-en" placeholder="Ex: Armchair..."></div>
+                        <div><label id="lbl-cat-emo">Émoji</label><input type="text" id="new-cat-emo" placeholder="🪑"></div>
                         <div>
-                            <label>Rangement / Type</label>
+                            <label id="lbl-cat-type">Rangement / Type</label>
                             <select id="new-cat-type" style="margin-bottom:15px;">
-                                <option value="decors" selected>🏠 Décors</option>
-                                <option value="style">✨ Style</option>
+                                <option value="decors" id="opt-cat-decors" selected>🏠 Décors</option>
+                                <option value="style" id="opt-cat-style">✨ Style</option>
                             </select>
                         </div>
                     </div>
-                    <button class="btn-gold" style="width:100%" onclick="addCustomCategory()">Ajouter la catégorie</button>
+                    <button class="btn-gold" style="width:100%" id="btn-add-cat" onclick="addCustomCategory()">Ajouter la catégorie</button>
                 </div>
 
                 <div class="card">
-                    <h2>📝 Modèles de Rendu</h2>
-                    <label>Sélectionner le modèle actif</label>
+                    <h2 id="title-config-models">📝 Modèles de Rendu</h2>
+                    <label id="lbl-select-model">Sélectionner le modèle actif</label>
                     <select id="model-selector" onchange="switchModel(this.value)" style="margin-bottom:15px;"></select>
                     
-                    <label>Insérer une balise au curseur :</label>
+                    <label id="lbl-inject-tags">Insérer une balise au curseur :</label>
                     <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;">
                         <button class="btn-tag-injector" onclick="injectTagAtCursor('{TITRE}')">＋ Titre</button>
                         <button class="btn-tag-injector" onclick="injectTagAtCursor('{MUSIC}')">＋ Musique</button>
@@ -177,20 +251,20 @@
                         <button class="btn-tag-injector" onclick="injectTagAtCursor('{TAGS}')">＋ Tags</button>
                     </div>
 
-                    <label>Éditer la structure du modèle sélectionné</label>
+                    <label id="lbl-edit-structure">Éditer la structure du modèle sélectionné</label>
                     <textarea id="model-body" rows="8" placeholder="Structure du template..." oninput="saveCurrentModelText()"></textarea>
                     
                     <div style="display:grid; grid-template-columns: 1fr 0.4fr; gap:10px; margin-top:15px;">
-                        <input type="text" id="new-model-name" placeholder="Nom du nouveau modèle..." style="margin:0;">
-                        <button class="btn-gold" onclick="createNewModel()">Créer / Modifier</button>
+                        <input type="text" id="new-model-name" placeholder="Nom du nouveau modèle..." style="margin:0;" id="inp-new-model">
+                        <button class="btn-gold" id="btn-create-model" onclick="createNewModel()">Créer / Modifier</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h2>💾 Maintenance & Backup</h2>
+                    <h2 id="title-config-maint">💾 Maintenance & Backup</h2>
                     <div style="display:flex; gap:15px;">
-                        <button class="btn-maint" onclick="exportData()">Exporter JSON</button>
-                        <button class="btn-maint" onclick="document.getElementById('importFile').click()">Importer JSON</button>
+                        <button class="btn-maint" id="btn-exp-json" onclick="exportData()">Exporter JSON</button>
+                        <button class="btn-maint" id="btn-imp-json" onclick="document.getElementById('importFile').click()">Importer JSON</button>
                         <input type="file" id="importFile" style="display:none" onchange="importData(event)">
                     </div>
                 </div>
@@ -198,8 +272,8 @@
         </div>
 
         <div id="main-previews" class="footer-previews">
-            <div class="preview-box"><div class="preview-header">Flickr <button class="btn-gold" style="padding:2px 10px; font-size:10px;" onclick="copyFlickr()">Copier</button></div><div class="preview-body" id="render-f"></div></div>
-            <div class="preview-box"><div class="preview-header">Primfeed <button class="btn-gold" style="padding:2px 10px; font-size:10px;" onclick="copyText()">Copier</button></div><div class="preview-body" id="render-p"></div></div>
+            <div class="preview-box"><div class="preview-header">Flickr <button class="btn-gold" id="btn-copy-flickr" style="padding:2px 10px; font-size:10px;" onclick="copyFlickr()">Copier</button></div><div class="preview-body" id="render-f"></div></div>
+            <div class="preview-box"><div class="preview-header">Primfeed <button class="btn-gold" id="btn-copy-primfeed" style="padding:2px 10px; font-size:10px;" onclick="copyText()">Copier</button></div><div class="preview-body" id="render-p"></div></div>
         </div>
         <div class="signature-studio">SL Pro Flow - <span id="app-version-display"></span> - Design by <span>Donair2a Resident</span></div>
     </div>
@@ -207,61 +281,9 @@
 
 <div id="help-overlay" class="overlay" onclick="toggleOverlay('help-overlay')">
     <div class="modal-help" onclick="event.stopPropagation()">
-        <h2 style="color:var(--accent); margin-top:0; border-bottom:1px solid rgba(201,160,80,0.2); padding-bottom:15px;">📖 Manuel d'Utilisation</h2>
-        <div style="display:flex; flex-direction:column; gap:25px; font-size:0.85rem; line-height:1.6; color:var(--text-main);">
-            <div>
-                <h3 style="color:var(--accent); margin-bottom:5px;">1. Saisie des Crédits & Saisie Prédictive Intelligente</h3>
-                <p>Lorsque vous rédigez la description d’un élément dans l’onglet <b>Credits</b> (boutons ✨ Style ou 🏠 Décors), le champ <i>Marque</i> intègre un systeme d’auto-complétion connecté en temps réel à votre base locale :</p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li><b>Saisie assistée :</b> Dès que vous tapez un minimum de 3 caractères, l’outil cherche une correspondance parmi vos Sponsors ou vos Événements enregistrés. S’il trouve un résultat, il remplit automatiquement le nom complet et injecte instantanément les informations rattachées (Lien SLURL, nom du Manager).</li>
-                    <li><b>Sauvegarde Express (💾) :</b> Si la marque tapée n’existe pas encore dans votre base de données, une icône de disquette dorée 💾 apparaît à côté de son titre. Cliquez dessus pour l’enregistrer immédiatement dans votre répertoire global sans interrompre la composition de votre post.</li>
-                    <li><b>Multi-adresses (Multi-SLURL) :</b> Vous pouvez saisir plusieurs liens pour un même créateur en les séparant par le caractère vertical <b>|</b> (ex: <code>LienMagasin | LienMarketplace</code>). L'outil s'occupera de créer proprement les liens numérotés <i>(Store 1, Store 2...)</i> dans vos rendus finaux.</li>
-                </ul>
-            </div>
-            <div>
-                <h3 style="color:var(--accent); margin-bottom:5px;">2. Gestion de l'affichage : Cloisonnement "Style" vs "Décors"</h3>
-                <p>Pour éviter l'encombrement visuel et les erreurs d’attribution, les menus déroulants de sélection de catégories sont étanches :</p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li>L'onglet <b>✨ Style</b> affiche exclusivement les catégories relatives à l’avatar et à l'habillement (ex: <i>Outfit, Corps, Shape, Peau, Cheveux, Bijoux...</i>).</li>
-                    <li>L'onglet <b>🏠 Décors</b> affiche quant à lui les éléments environnementaux (ex: <i>Backdrop, Meubles, Végétaux, Poses, Animaux...</i>).</li>
-                </ul>
-                <p style="margin-top:5px; background:rgba(0,0,0,0.15); padding:10px; border-left:3px solid var(--accent); border-radius:4px;">💡 <b>Note sur les Réseaux & Aperçus :</b> Afin de maximiser l’espace de travail lors des phases d’édition complexes, la barre inférieure des rendus (Aperçus Flickr et Primfeed) est <b>automatiquement masquée</b> lorsque vous naviguez sur l’onglet <b>Profil</b>, et réapparaît sur les onglets de rédaction.</p>
-            </div>
-            <div>
-                <h3 style="color:var(--accent); margin-bottom:5px;">3. Formulaire Unique de Modification des Catégories</h3>
-                <p>Dans l’onglet <b>Profil</b>, la section <i>Personnalisation des Catégories</i> liste l’intégralité de vos critères de tri. Pour modifier une structure existante, cliquez sur l’icône de crayon ✏️ :</p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li>Un **formulaire modale unifié** apparaît à l'écran, regroupant simultanément l'ensemble des données configurables.</li>
-                    <li>Vous pouvez librement renommer son libellé en Français, changer son Émoji graphique, spécifier sa traduction en Anglais (utilisée lors de la compilation finale de vos templates), ou changer son type de destination (<b>Style</b> ou <b>Décors</b>) via un menu déroulant dédié.</li>
-                    <li>Cliquez sur <i>Enregistrer</i> pour valider les modifications globales. Le script ré-indexe automatiquement tous vos menus déroulants en arrière-plan.</li>
-                </ul>
-            </div>
-            <div>
-                <h3 style="color:var(--accent); margin-bottom:5px;">4. Gestion Avancée des Deadlines & Alertes Visuelles</h3>
-                <p>L'outil intègre un tableau de suivi temporel des livraisons pour vos partenariats de blog ou de contenu :</p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li><b>Code couleur dynamique :</b> Le voyant d'état d'une marque passe automatiquement au <b>vert</b> si la date butoir est supérieure à 5 jours, au <b>jaune orange</b> à J-5, et vire au <b>rouge critique</b> à J-2 ou moins.</li>
-                    <li><b>Badge d'Alerte :</b> Dès qu’une seule de vos échéances atteint le seuil critique des 48h (J-2), un point rouge clignotant se fixe sur le bouton ⏳ <b>Deadlines</b> de votre menu principal pour attirer votre attention, même si vous travaillez sur un autre onglet.</li>
-                </ul>
-            </div>
-            <div>
-                <h3 style="color:var(--accent); margin-bottom:5px;">5. Éditeur de Modèles (Templates) & Injecteurs de Balises</h3>
-                <p>Vous pouvez gérer une infinité de structures de mise en forme pour vos textes via le gestionnaire de modèles :</p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li>Sélectionnez le modèle actif via le menu déroulant pour modifier son comportement.</li>
-                    <li>Modifiez directement le squelette textuel dans la zone d'édition. Pour ajouter une section dynamique, placez votre curseur à l'endroit désirez et cliquez sur les boutons injecteurs rapides (<i>＋ Titre, ＋ Style, ＋ Décors...</i>). Le script y insérera la balise correspondante.</li>
-                </ul>
-            </div>
-            <div>
-                <h3 style="color:var(--accent); margin-bottom:5px;">6. Système de Sauvegarde, Importation & Exportation (Backup)</h3>
-                <p>Toutes vos bases de données sont stockées localement dans votre navigateur. Pour sécuriser votre travail :</p>
-                <ul style="margin-top:5px; padding-left:20px;">
-                    <li>Utilisez le bouton <b>Exporter JSON</b> pour télécharger un fichier de sauvegarde physique complet (<code>.json</code>).</li>
-                    <li>En cas de changement de machine, utilisez <b>Importer JSON</b> pour restaurer l'intégralité de vos configurations en un instant.</li>
-                </ul>
-            </div>
-        </div>
-        <button class="btn-gold" style="width:100%; margin-top:30px;" onclick="toggleOverlay('help-overlay')">Fermer le guide</button>
+        <h2 id="help-modal-main-title" style="color:var(--accent); margin-top:0; border-bottom:1px solid rgba(201,160,80,0.2); padding-bottom:15px;">📖 Manuel d'Utilisation</h2>
+        <div id="guide-container" style="display:flex; flex-direction:column; gap:8px; margin-top:15px; overflow-y:auto; max-height:450px;"></div>
+        <button class="btn-gold" style="width:100%; margin-top:30px;" id="btn-close-help" onclick="toggleOverlay('help-overlay')">Fermer le guide</button>
     </div>
 </div>
 
@@ -269,35 +291,35 @@
     <div class="modal" onclick="event.stopPropagation()">
         <h3 id="edit-title" style="color:var(--accent); margin-top:0;">Editer</h3>
         <input type="hidden" id="edit-id"><input type="hidden" id="edit-type">
-        <label>Lien / SLURL</label><input type="text" id="edit-val-1">
+        <label id="lbl-edit-link">Lien / SLURL</label><input type="text" id="edit-val-1">
         <label id="edit-lbl-2">Manager</label><input type="text" id="edit-val-2">
-        <button class="btn-gold" style="width:100%" onclick="saveEdit()">Enregistrer</button>
+        <button class="btn-gold" style="width:100%" id="btn-edit-submit" onclick="saveEdit()">Enregistrer</button>
     </div>
 </div>
 
 <div id="cat-edit-overlay" class="overlay" onclick="closeCatEdit()">
     <div class="modal" onclick="event.stopPropagation()">
-        <h3 style="color:var(--accent); margin-top:0;">Modifier la Catégorie</h3>
+        <h3 id="modal-title-edit-cat" style="color:var(--accent); margin-top:0;">Modifier la Catégorie</h3>
         <input type="hidden" id="cat-edit-old-key">
         
-        <label>Nom (Français)</label>
-        <input type="text" id="cat-edit-id" placeholder="Nom de la catégorie...">
+        <label id="lbl-modal-cat-fr">Nom (Français)</label>
+        <input type="text" id="cat-edit-id" placeholder="Nom de la catégorie..." id="inp-cat-fr-plc">
         
-        <label>Traduction (Anglais)</label>
-        <input type="text" id="cat-edit-en" placeholder="Traduction anglaise...">
+        <label id="lbl-modal-cat-en">Traduction (Anglais)</label>
+        <input type="text" id="cat-edit-en" placeholder="Traduction anglaise..." id="inp-cat-en-plc">
         
-        <label>Émoji</label>
-        <input type="text" id="cat-edit-emo" placeholder="Émoji...">
+        <label id="lbl-modal-cat-emo">Émoji</label>
+        <input type="text" id="cat-edit-emo" placeholder="Émoji..." id="inp-cat-emo-plc">
         
-        <label>Rangement / Type</label>
+        <label id="lbl-modal-cat-type">Rangement / Type</label>
         <select id="cat-edit-type" style="margin-bottom:20px;">
-            <option value="style">✨ Style</option>
-            <option value="decors">🏠 Décors</option>
+            <option value="style" id="opt-modal-style">✨ Style</option>
+            <option value="decors" id="opt-modal-decors">🏠 Décors</option>
         </select>
         
         <div style="display:flex; gap:10px;">
-            <button class="btn-gold" style="flex:1;" onclick="saveCatEdit()">Enregistrer</button>
-            <button class="btn-maint" style="flex:1; border-color:var(--border); color:var(--text-muted);" onclick="closeCatEdit()">Annuler</button>
+            <button class="btn-gold" style="flex:1;" id="btn-modal-cat-save" onclick="saveCatEdit()">Enregistrer</button>
+            <button class="btn-maint" style="flex:1; border-color:var(--border); color:var(--text-muted);" id="btn-modal-cat-cancel" onclick="closeCatEdit()">Annuler</button>
         </div>
     </div>
 </div>

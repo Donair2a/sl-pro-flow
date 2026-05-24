@@ -1,613 +1,611 @@
-const APP_VERSION = "1.3.18";
+const APP_VERSION = "1.4.0";
 
-    let sponsors = JSON.parse(localStorage.getItem('SLProSpons_v7')) || {};
-    let events = JSON.parse(localStorage.getItem('SLProEv_v7')) || {};
-    let deadlines = JSON.parse(localStorage.getItem('SLProDeadlines_v1')) || [];
-    
-    const defaultCats = {
-        "Outfit": { emo: "👔", en: "Outfit", type: "style" }, "Corps": { emo: "👤", en: "Body", type: "style" }, "Shape": { emo: "📏", en: "Shape", type: "style" },
-        "Peau": { emo: "✨", en: "Skin", type: "style" }, "Tête": { emo: "💀", en: "Head", type: "style" }, "Cheveux": { emo: "💇‍♂️", en: "Hair", type: "style" },
-        "Yeux": { emo: "👁️", en: "Eyes", type: "style" }, "Barbe": { emo: "🧔", en: "Beard", type: "style" }, "Tatouage": { emo: "💉", en: "Tattoo", type: "style" },
-        "Maquillage": { emo: "💄", en: "Makeup", type: "style" }, "Haut": { emo: "👕", en: "Top", type: "style" }, "Bas": { emo: "👖", en: "Bottom", type: "style" },
-        "Robe": { emo: "👗", en: "Dress", type: "style" }, "Chaussures": { emo: "👟", en: "Shoes", type: "style" }, "Chapeau": { emo: "👒", en: "Hat", type: "style" },
-        "Bijoux": { emo: "💎", en: "Jewelry", type: "style" }, "Accessoire": { emo: "👜", en: "Accessory", type: "style" }, 
-        "Backdrop": { emo: "🖼️", en: "Backdrop", type: "decors" }, "Meubles": { emo: "🛋️", en: "Furniture", type: "decors" }, 
-        "Végétaux": { emo: "🌳", en: "Plants", type: "decors" }, "Poses": { emo: "🚶", en: "Poses", type: "decors" },
-        "Véhicules": { emo: "🚗", en: "Vehicles", type: "decors" }, "Animaux": { emo: "🐾", en: "Animals", type: "decors" }, 
-        "Créatures": { emo: "👾", en: "Creatures", type: "decors" }, "Peluches": { emo: "🧸", en: "Plushies", type: "decors" }, 
-        "Monstres": { emo: "👹", en: "Monsters", type: "decors" }
-    };
-    let appCategories = JSON.parse(localStorage.getItem('SLProCategories_v1')) || defaultCats;
+let sponsors = JSON.parse(localStorage.getItem('SLProSpons_v7')) || {};
+let events = JSON.parse(localStorage.getItem('SLProEv_v7')) || {};
+let deadlines = JSON.parse(localStorage.getItem('SLProDeadlines_v1')) || [];
 
-    const staticStyleKeys = ["Outfit","Corps","Shape","Peau","Tête","Cheveux","Yeux","Barbe","Tatouage","Maquillage","Haut","Bas","Robe","Chaussures","Chapeau","Bijoux","Accessoire"];
-    Object.keys(appCategories).forEach(k => {
-        if (staticStyleKeys.includes(k)) {
-            appCategories[k].type = "style";
-        } else if (!appCategories[k].type) {
-            appCategories[k].type = "decors";
-        }
-    });
-    localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
+const defaultCats = {
+    "Outfit": { emo: "👔", en: "Outfit", type: "style" }, "Corps": { emo: "👤", en: "Body", type: "style" }, "Shape": { emo: "📏", en: "Shape", type: "style" },
+    "Peau": { emo: "✨", en: "Skin", type: "style" }, "Tête": { emo: "💀", en: "Head", type: "style" }, "Cheveux": { emo: "💇‍♂️", en: "Hair", type: "style" },
+    "Yeux": { emo: "👁️", en: "Eyes", type: "style" }, "Barbe": { emo: "🧔", en: "Beard", type: "style" }, "Tatouage": { emo: "💉", en: "Tattoo", type: "style" },
+    "Maquillage": { emo: "💄", en: "Makeup", type: "style" }, "Haut": { emo: "👕", en: "Top", type: "style" }, "Bas": { emo: "👖", en: "Bottom", type: "style" },
+    "Robe": { emo: "👗", en: "Dress", type: "style" }, "Chaussures": { emo: "👟", en: "Shoes", type: "style" }, "Chapeau": { emo: "👒", en: "Hat", type: "style" },
+    "Bijoux": { emo: "💎", en: "Jewelry", type: "style" }, "Accessoire": { emo: "👜", en: "Accessory", type: "style" }, 
+    "Backdrop": { emo: "🖼️", en: "Backdrop", type: "decors" }, "Meubles": { emo: "🛋️", en: "Furniture", type: "decors" }, 
+    "Végétaux": { emo: "🌳", en: "Plants", type: "decors" }, "Poses": { emo: "🚶", en: "Poses", type: "decors" },
+    "Véhicules": { emo: "🚗", en: "Vehicles", type: "decors" }, "Animaux": { emo: "🐾", en: "Animals", type: "decors" }, 
+    "Créatures": { emo: "👾", en: "Creatures", type: "decors" }, "Peluches": { emo: "🧸", en: "Plushies", type: "decors" }, 
+    "Monstres": { emo: "👹", en: "Monsters", type: "decors" }
+};
+let appCategories = JSON.parse(localStorage.getItem('SLProCategories_v1')) || defaultCats;
 
-    const defaultModels = {
-        "Modèle Standard (Diamants)": "{TITRE}\n{MUSIC}\n[STYLE]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>STYLE</b>\n{STYLE}\n[/STYLE][DECORS]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>DECORS</b>\n{DECORS}\n[/DECORS][SETTINGS]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>⚙️ SETTINGS</b>\n{SETTINGS}\n[/SETTINGS][SOCIAL]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\nFollow me on social media\n{SOCIAL}\n[/SOCIAL]\n[TAGS]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>TAGS</b>\n{TAGS}[/TAGS]",
-        "Modèle Compact": "{TITRE} {MUSIC}\n[STYLE]🔹 STYLE\n{STYLE}\n[/STYLE][DECORS]🔹 DECORS\n{DECORS}\n[/DECORS][SETTINGS]🔹 SETTINGS\n{SETTINGS}\n[/SETTINGS][SOCIAL]🌐\n{SOCIAL}\n[/SOCIAL][TAGS]🏷️ {TAGS}[/TAGS]",
-        "Modèle Épuré (Lignes Simples)": "{TITRE}\n{MUSIC}\n[STYLE]-----------------------\n{STYLE}\n[/STYLE][DECORS]-----------------------\n{DECORS}\n[/DECORS][SETTINGS]-----------------------\n{SETTINGS}\n[/SETTINGS][SOCIAL]-----------------------\n{SOCIAL}\n[/SOCIAL]\n[TAGS]{TAGS}[/TAGS]"
-    };
-    let appModels = JSON.parse(localStorage.getItem('SLProModels_v1')) || defaultModels;
-    
-    if (!appModels["Modèle Standard (Diamants)"]) {
-        appModels["Modèle Standard (Diamants)"] = defaultModels["Modèle Standard (Diamants)"];
-    }
-    
-    let activeModelKey = localStorage.getItem('SLProActiveModel_v1') || "Modèle Standard (Diamants)";
-    if (!appModels[activeModelKey]) {
-        activeModelKey = "Modèle Standard (Diamants)";
-    }
-    
-    let lastKey = "";
-    let primfeedDataCache = "";
+let activeModelKey = localStorage.getItem('SLProActiveModel_v1') || "Modèle Standard (Diamants)";
+let lastKey = "";
+let primfeedDataCache = "";
+let currentLang = localStorage.getItem('SLProLang_v1') || "FR";
 
-    window.onload = () => { 
-        document.getElementById('app-version-display').innerText = "v" + APP_VERSION;
-        loadCfg(); renderDB(); renderDeadlines(); checkDeadlinesAlert(); renderCustomCategories(); buildModelSelector(); update(); 
-        window.addEventListener('keydown', (e) => { lastKey = e.key; }); 
-    };
-
-    function sidebarNavigate(blockId, btn) { showMainTab('tab-editor', document.getElementById('nav-editor')); showBlock(blockId, btn); }
-    
-    function showMainTab(id, btn) { 
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); 
-        document.querySelectorAll('nav .nav-link').forEach(l => l.classList.remove('active')); 
-        document.getElementById(id).classList.add('active'); 
-        btn.classList.add('active'); 
-        
-        const previewBox = document.getElementById('main-previews');
-        if (id === 'tab-config') {
-            previewBox.style.display = 'none';
-        } else {
-            previewBox.style.display = 'flex';
-        }
-        renderDB(); 
-    }
-    
-    function showBlock(id, btn) { document.querySelectorAll('.editor-block').forEach(b => b.classList.remove('active')); document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
-
-    function handleSmartInput(input, type) {
-        const val = input.value.trim(); const row = input.closest('.dynamic-row'); const saveBtn = row.querySelector(type === 'spons' ? '.btn-save-express' : '.btn-save-ev');
-        if (lastKey === "Backspace" || lastKey === "Delete") return;
-        const data = (type === 'spons') ? sponsors : events;
-        const matchKey = Object.keys(data).find(k => k.startsWith(val.toLowerCase()));
-        if (val.length >= 3 && matchKey) {
-            const entry = data[matchKey]; input.value = entry.name;
-            if (type === 'spons') { row.querySelector('.row-sl').value = entry.slurl || ""; row.querySelector('.row-sl').dataset.isFromDB = "true"; row.querySelector('.row-mgr').value = entry.mgr || ""; }
-            else if (type === 'ev') { row.querySelector('.row-ev-l').value = entry.url || ""; row.querySelector('.row-ev-l').dataset.isFromDB = "true"; }
-            if(saveBtn) saveBtn.style.display = 'none'; update();
-        } else if (val.length >= 2) { if(saveBtn) saveBtn.style.display = 'inline-block'; }
-    }
-
-    function saveExpress(btn, type) {
-        const row = btn.closest('.dynamic-row'); 
-        if (type === 'spons') {
-            const name = row.querySelector('.row-b').value.trim();
-            if (!name) return;
-            sponsors[name.toLowerCase()] = { name, slurl: row.querySelector('.row-sl').value.trim(), mgr: row.querySelector('.row-mgr').value.trim() };
-            localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors));
-            row.querySelector('.row-sl').dataset.isFromDB = "true";
-        } else {
-            const name = row.querySelector('.row-ev-n').value.trim();
-            if (!name) return;
-            events[name.toLowerCase()] = { name, url: row.querySelector('.row-ev-l').value.trim() };
-            localStorage.setItem('SLProEv_v7', JSON.stringify(events));
-            row.querySelector('.row-ev-l').dataset.isFromDB = "true";
-        }
-        btn.style.display = 'none';
-        update();
-    }
-
-    function addDynamicRowFromStorage(target, defaultValue) {
-        const allKeys = Object.keys(appCategories);
-        let filteredKeys = allKeys.filter(k => {
-            const catInfo = appCategories[k];
-            const catType = (catInfo && catInfo.type) ? catInfo.type : "decors";
-            return catType === target;
-        });
-        addDynamicRow(target, defaultValue, filteredKeys);
-    }
-
-    function addDynamicRow(t, d, cats) {
-        const id = Math.random().toString(36).substr(2, 5); const div = document.createElement('div'); div.className = 'dynamic-row';
-        div.innerHTML = `<button class="btn-del-row" onclick="this.parentElement.remove();update()">×</button>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <div style="flex:0.5"><label>Catégorie</label><select class="row-cat" onchange="update()">${cats.map(c => `<option value="${c}" ${c===d?'selected':''}>${c}</option>`).join('')}</select></div>
-                <div style="flex:1"><label>Marque <button class="btn-save-express" onclick="saveExpress(this, 'spons')">💾</button></label><input type="text" class="row-b" placeholder="Nom..." oninput="handleSmartInput(this, 'spons')"></div>
-                <div style="flex:1"><label>Article</label><input type="text" class="row-n" placeholder="Article..." oninput="update()"></div>
+// MULTILINGUAL UI DICTIONARY
+const uiDictionary = {
+    FR: {
+        navEditor: "Credits", navSponsors: "Sponsors & Events", navDl: "Deadlines", navConfig: "Tableau de bord",
+        sideIntro: "📸 Titre & Musique", sideStyle: "✨ Style", sideDecors: "🏠 Décors", sidePost: "🎨 Technique", sideTags: "🏷️ Tags", sideClear: "✨ Nouveau",
+        titleIntro: "📸 Titre & Musique", titleStyle: "✨ Style", titleDecors: "🏠 Décors", titleTech: "🎨 Technique", titleTags: "🏷️ Tags",
+        titleAddDl: "⏳ Deadlines", titleConfigSocial: "💎 Tableau de bord & Réseaux", lblCfgTags: "Tags par défaut (permanents)",
+        titleConfigCats: "🎨 Personnalisation des Catégories", lblCatFr: "Nom (Français)", lblCatEn: "Traduction (Anglais)", lblCatEmo: "Émoji", lblCatType: "Rangement / Type",
+        optCatDecors: "🏠 Décors", optCatStyle: "✨ Style", btnAddCat: "Ajouter la catégorie",
+        titleConfigModels: "📝 Modèles de Rendu", lblSelectModel: "Sélectionner le modèle actif", lblInjectTags: "Insérer une balise au curseur :", lblEditStructure: "Éditer la structure du modèle sélectionné",
+        titleConfigMaint: "💾 Maintenance & Backup", btnExpJson: "Exporter JSON", btnImpJson: "Importer JSON", btnCreateModel: "Créer / Modifier",
+        btnCopy: "Copier", titleSponsList: "Sponsors", titleEvList: "Events", lblPermTags: "Tags permanents (Tableau de bord)", lblAutoTags: "Auto-tags suggérés",
+        btnAddTxt: "＋ Ajouter un élément", btnAddDl: "Ajouter",
+        headerViewer: "Viewer", headerSoftware: "Logiciel Retouche", lblViNone: "Aucun", lblSoftNone: "Aucun",
+        rowCat: "Catégorie", rowBrand: "Marque", rowArticle: "Article", rowPlcName: "Nom...", rowPlcArt: "Article...",
+        rowCheckEvent: "L'article est disponible dans un event ?", rowEvName: "Nom Event", rowEvLink: "Lien Event",
+        rowPlcSlurl: "SLURL (Séparez par | si plusieurs)...", rowPlcMgr: "Manager...",
+        phTitre: "Titre...", phMood: "Citation...", phMusL: "URL Musique...", phMusT: "Artiste - Titre...",
+        phTagsManual: "Tags séparés par virgules...", phPostNote: "Notes techniques...",
+        confirmClear: "Créer un nouveau post et réinitialiser tout le masque de saisie ?", confirmImport: "Importer les données ?", confirmDelItem: "Supprimer ?", alertCatRequired: "Le nom français et la traduction anglaise sont obligatoires.", alertModelName: "Veuillez donner un nom à votre nouveau modèle.",
+        editTitleSpons: "Editer : ", editTitleEv: "Editer : ", lblEditLink: "Lien / SLURL", lblEditMgr: "Manager", btnEditSubmit: "Enregistrer",
+        modalTitleEditCat: "Modifier la Catégorie", lblModalCatFr: "Nom (Français)", lblModalCatEn: "Traduction (Anglais)", lblModalCatEmo: "Émoji", lblModalCatType: "Rangement / Type", btnModalCatSave: "Enregistrer", btnModalCatCancel: "Annuler",
+        optModalStyle: "✨ Style", optModalDecors: "🏠 Décors", phCatFr: "Nom de la catégorie...", phCatEn: "Traduction anglaise...", phCatEmo: "Émoji...",
+        helpMainTitle: "📖 Guide d'Utilisation", btnCloseHelp: "Fermer le guide",
+        helpContent: `
+            <div style="background:rgba(201,160,80,0.1); border:1px solid var(--accent); border-radius:8px; padding:15px; margin-bottom:15px;">
+                <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 Bienvenue sur SL Proflow</h3>
+                <p style="margin:0; font-size:0.85rem;">Outil conçu pour aider les blogueurs Second Life à <b>automatiser la rédaction de leurs crédits</b>. Renseignez votre formulaire, et le studio génère vos textes complets formatés pour Flickr et Primfeed.</p>
             </div>
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1"><input type="text" class="row-sl" placeholder="SLURL (Séparez par | si plusieurs)..." oninput="this.dataset.isFromDB='false';update()"></div>
-                <div style="flex:0.8"><input type="text" class="row-mgr" placeholder="Manager..." oninput="update()"></div>
+            <div class="qa-item" onclick="toggleQA('qa1')">❓ Comment fonctionne l'auto-complétion ? <span>▼</span></div>
+            <div id="qa1" class="qa-ans" style="display:none;">Dès que vous tapez 3 lettres d'une marque dans <b>Credits</b>, l'outil complète le reste. Si la marque est nouvelle, cliquez sur 💾 pour l'ajouter définitivement à votre base locale.</div>
+            <div class="qa-item" onclick="toggleQA('qa2')">🔗 Comment gérer plusieurs liens par marque ? <span>▼</span></div>
+            <div id="qa2" class="qa-ans" style="display:none;">Utilisez le séparateur <b>|</b> (barre verticale) dans le champ SLURL. L'outil créera automatiquement des liens numérotés <i>(Store 1 | Store 2)</i> traduits en anglais dans vos rendus finaux.</div>
+            <div class="qa-item" onclick="toggleQA('qa3')">🌍 La traduction FR/EN modifie-t-elle mes crédits ? <span>▼</span></div>
+            <div id="qa3" class="qa-ans" style="display:none;"><b>Non !</b> Le bouton ovale traduit uniquement l'interface de travail. Vos posts générés en bas de page resteront fixés en anglais, prêts pour vos publications.</div>
+            <div class="qa-item" onclick="toggleQA('qa4')">⏳ Comment suivre mes Deadlines ? <span>▼</span></div>
+            <div id="qa4" class="qa-ans" style="display:none;">Ajoutez vos échéances dans l'onglet dédié. Un code couleur vous indique l'urgence (Vert > 5j, Orange > 2j, Rouge = Alerte). Une pastille rouge apparaît sur le menu principal à moins de 48h.</div>
+            <div class="qa-item" onclick="toggleQA('qa5')">💻 Installer l'application sur mon Bureau <span>▼</span></div>
+            <div id="qa5" class="qa-ans" style="display:none;">Puisque l'outil est hébergé en ligne, installez-le comme un vrai logiciel :<br><br><b>Sur Chrome :</b> Cliquez sur le menu (3 points) &rarr; <i>Enregistrer et partager</i> &rarr; <b>Installer la page en tant qu'application...</b><br><b>Sur Edge :</b> Cliquez sur le menu (3 points) &rarr; <i>Applications</i> &rarr; <b>Installer ce site en tant qu'application</b>.</div>`
+    },
+    EN: {
+        navEditor: "Credits", navSponsors: "Sponsors & Events", navDl: "Deadlines", navConfig: "Dashboard",
+        sideIntro: "📸 Title & Music", sideStyle: "✨ Style", sideDecors: "🏠 Decors", sidePost: "🎨 Technical", sideTags: "🏷️ Tags", sideClear: "✨ New",
+        titleIntro: "📸 Title & Music", titleStyle: "✨ Style", titleDecors: "🏠 Decors", titleTech: "🎨 Technical", titleTags: "🏷️ Tags",
+        titleAddDl: "⏳ Deadlines", titleConfigSocial: "💎 Dashboard & Networks", lblCfgTags: "Default tags (permanent)",
+        titleConfigCats: "🎨 Categories Customization", lblCatFr: "Name (French)", lblCatEn: "Translation (English)", lblCatEmo: "Emoji", lblCatType: "Section / Type",
+        optCatDecors: "🏠 Decors", optCatStyle: "✨ Style", btnAddCat: "Add category",
+        titleConfigModels: "📝 Rendering Models", lblSelectModel: "Select active model", lblInjectTags: "Insert a tag at cursor:", lblEditStructure: "Edit selected model structure",
+        titleConfigMaint: "💾 Maintenance & Backup", btnExpJson: "Export JSON", btnImpJson: "Import JSON", btnCreateModel: "Create / Update",
+        btnCopy: "Copy", titleSponsList: "Sponsors", titleEvList: "Events", lblPermTags: "Permanent tags (Dashboard)", lblAutoTags: "Suggested auto-tags",
+        btnAddTxt: "＋ Add an item", btnAddDl: "Add",
+        headerViewer: "Viewer", headerSoftware: "Editing Software", lblViNone: "None", lblSoftNone: "None",
+        rowCat: "Category", rowBrand: "Brand", rowArticle: "Item", rowPlcName: "Name...", rowPlcArt: "Item name...",
+        rowCheckEvent: "Is this item available at an event?", rowEvName: "Event Name", rowEvLink: "Event Link",
+        rowPlcSlurl: "SLURL (Separate with | if multiple)...", rowPlcMgr: "Manager...",
+        phTitre: "Title...", phMood: "Quote...", phMusL: "Music URL...", phMusT: "Artist - Title...",
+        phTagsManual: "Tags separated by commas...", phPostNote: "Technical notes...",
+        confirmClear: "Create a new post and completely reset the entry form?", confirmImport: "Import data?", confirmDelItem: "Delete?", alertCatRequired: "French name and English translation are required.", alertModelName: "Please provide a name for your new model.",
+        editTitleSpons: "Edit: ", editTitleEv: "Edit: ", lblEditLink: "Link / SLURL", lblEditMgr: "Manager", btnEditSubmit: "Save",
+        modalTitleEditCat: "Modify Category", lblModalCatFr: "Name (French)", lblModalCatEn: "Translation (English)", lblModalCatEmo: "Emoji", lblModalCatType: "Section / Type", btnModalCatSave: "Save", btnModalCatCancel: "Cancel",
+        optModalStyle: "✨ Style", optModalDecors: "🏠 Decors", phCatFr: "Category name...", phCatEn: "English translation...", phCatEmo: "Emoji...",
+        helpMainTitle: "📖 User Manual", btnCloseHelp: "Close guide",
+        helpContent: `
+            <div style="background:rgba(201,160,80,0.1); border:1px solid var(--accent); border-radius:8px; padding:15px; margin-bottom:15px;">
+                <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 Welcome to SL Proflow</h3>
+                <p style="margin:0; font-size:0.85rem;">Application designed to help Second Life bloggers <b>automate their credits formatting</b>. Fill out the form, and the studio instantly generates formatted text tailored for Flickr and Primfeed.</p>
             </div>
-            <div style="margin-top:10px;">
-                <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.75rem; color:var(--accent); cursor:pointer;">
-                    <input type="checkbox" class="row-ev-check" onchange="toggleEv('${id}')" style="width:auto; margin:0;"> L'article est disponible dans un event ?
-                </label>
-            </div>
-            <div id="ev-box-${id}" style="display:none; margin-top:10px; gap:10px;">
-                <div style="flex:1"><label>Nom Event <button class="btn-save-express btn-save-ev" onclick="saveExpress(this, 'ev')">💾</button></label><input type="text" class="row-ev-n" placeholder="Nom Event..." oninput="handleSmartInput(this, 'ev')"></div>
-                <div style="flex:1"><label>Lien Event</label><input type="text" class="row-ev-l" placeholder="Lien Event..." oninput="this.dataset.isFromDB='false';update()"></div>
-            </div>`;
-        document.getElementById(t + '-container').appendChild(div);
+            <div class="qa-item" onclick="toggleQA('qa1_en')">❓ How does intelligent auto-completion work? <span>▼</span></div>
+            <div id="qa1_en" class="qa-ans" style="display:none;">Type 3 letters of a brand in <b>Credits</b>, and the tool autofills the rest. If it's a new brand, click 💾 to quickly save it to your local database.</div>
+            <div class="qa-item" onclick="toggleQA('qa2_en')">🔗 How do I process multiple links per brand? <span>▼</span></div>
+            <div id="qa2_en" class="qa-ans" style="display:none;">Use the separator <b>|</b> (vertical bar) in the SLURL field. The system will neatly compile numbered hyperlinks <i>(Store 1 | Store 2)</i> in your final copy.</div>
+            <div class="qa-item" onclick="toggleQA('qa3_en')">🌍 Does the UI language toggle change my posts? <span>▼</span></div>
+            <div id="qa3_en" class="qa-ans" style="display:none;"><b>No!</b> The oval toggle translates only your working environment. Generated text grids at the bottom will constantly be compiled in structural English.</div>
+            <div class="qa-item" onclick="toggleQA('qa4_en')">⏳ How to track my blogging assignments? <span>▼</span></div>
+            <div id="qa4_en" class="qa-ans" style="display:none;">Manage due dates in the Deadlines tab. Status colors show urgency (Green > 5d, Orange > 2d, Red = Alert). A persistent red badge pins to the menu at < 48h.</div>
+            <div class="qa-item" onclick="toggleQA('qa5_en')">💻 Installing app to Desktop (PWA) <span>▼</span></div>
+            <div id="qa5_en" class="qa-ans" style="display:none;">Run SL Proflow as a standalone native app:<br><br><b>On Chrome:</b> Click menu (3 dots) &rarr; <i>Save and share</i> &rarr; <b>Install page as app...</b><br><b>On Edge:</b> Click menu (3 dots) &rarr; <i>Apps</i> &rarr; <b>Install this site as an app</b>.</div>`
     }
+};
 
-    function toggleEv(id) { let el = document.getElementById(`ev-box-${id}`); el.style.display = el.style.display==='none'?'flex':'none'; update(); }
-
-    function buildModelSelector() {
-        const sel = document.getElementById('model-selector'); sel.innerHTML = "";
+window.onload = () => { 
+    let verDisp = document.getElementById('app-version-display'); if(verDisp) verDisp.innerText = "v" + APP_VERSION;
+    document.documentElement.setAttribute('data-ui-lang', currentLang);
+    let ms = document.getElementById('model-selector'); if(ms) {
+        let appModels = JSON.parse(localStorage.getItem('SLProModels_v1')) || {};
+        ms.innerHTML = "";
         Object.keys(appModels).forEach(k => {
-            sel.innerHTML += `<option value="${k}" ${k === activeModelKey ? 'selected' : ''}>${k}</option>`;
+            ms.innerHTML += `<option value="${k}" ${k === activeModelKey ? 'selected' : ''}>${k}</option>`;
         });
-        document.getElementById('model-body').value = appModels[activeModelKey] || "";
     }
+    loadCfg(); renderDB(); renderDeadlines(); checkDeadlinesAlert(); renderCustomCategories(); buildModelSelector(); applyLanguage(); update(); 
+    window.addEventListener('keydown', (e) => { lastKey = e.key; }); 
+};
 
-    function switchModel(k) {
-        activeModelKey = k;
-        localStorage.setItem('SLProActiveModel_v1', k);
-        document.getElementById('model-body').value = appModels[k] || "";
-        update();
-    }
+function sidebarNavigate(blockId, btn) { showMainTab('tab-editor', document.getElementById('nav-editor')); showBlock(blockId, btn); }
 
-    function saveCurrentModelText() {
-        appModels[activeModelKey] = document.getElementById('model-body').value;
-        localStorage.setItem('SLProModels_v1', JSON.stringify(appModels));
-        update();
-    }
+function showMainTab(id, btn) { 
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); 
+    document.querySelectorAll('nav .nav-link').forEach(l => l.classList.remove('active')); 
+    let tab = document.getElementById(id); if(tab) tab.classList.add('active'); 
+    if(btn) btn.classList.add('active'); 
+    const prevs = document.getElementById('main-previews');
+    if(prevs) prevs.style.display = (id === 'tab-config') ? 'none' : 'flex';
+    renderDB(); 
+}
 
-    function injectTagAtCursor(tag) {
-        const txtArea = document.getElementById('model-body');
-        const startPos = txtArea.selectionStart;
-        const endPos = txtArea.selectionEnd;
-        const currentText = txtArea.value;
-        
-        txtArea.value = currentText.substring(0, startPos) + tag + currentText.substring(endPos, currentText.length);
-        
-        txtArea.focus();
-        txtArea.selectionStart = startPos + tag.length;
-        txtArea.selectionEnd = startPos + tag.length;
-        
-        saveCurrentModelText();
-    }
+function showBlock(id, btn) { 
+    document.querySelectorAll('.editor-block').forEach(b => b.classList.remove('active')); 
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active')); 
+    let b = document.getElementById(id); if(b) b.classList.add('active'); 
+    if(btn) btn.classList.add('active'); 
+}
 
-    function createNewModel() {
-        const nameInput = document.getElementById('new-model-name');
-        const name = nameInput.value.trim();
-        if(!name) {
-            alert("Veuillez donner un nom à votre nouveau modèle.");
-            return;
+function toggleAppLanguage() {
+    currentLang = (currentLang === "FR") ? "EN" : "FR";
+    localStorage.setItem('SLProLang_v1', currentLang);
+    document.documentElement.setAttribute('data-ui-lang', currentLang);
+    applyLanguage();
+    renderCustomCategories();
+    update();
+}
+
+function applyLanguage() {
+    const dict = uiDictionary[currentLang];
+    const applyText = (id, txt) => { let el = document.getElementById(id); if(el) el.innerText = txt; };
+    const applyPlc = (id, txt) => { let el = document.getElementById(id); if(el) el.placeholder = txt; };
+    const applyHtml = (id, txt) => { let el = document.getElementById(id); if(el) el.innerHTML = txt; };
+
+    applyText('nav-editor', dict.navEditor); applyText('nav-sponsors', dict.navSponsors); applyText('nav-dl', dict.navDl); applyText('nav-config', dict.navConfig);
+    applyText('side-btn-intro', dict.sideIntro); applyText('side-btn-style', dict.sideStyle); applyText('side-btn-decors', dict.sideDecors); applyText('side-btn-post', dict.sidePost); applyText('side-btn-tags', dict.sideTags); applyText('side-btn-clear', dict.sideClear);
+    applyText('title-intro', dict.titleIntro); applyText('title-style', dict.titleStyle); applyText('title-decors', dict.titleDecors); applyText('title-tech', dict.titleTech); applyText('title-tags', dict.titleTags); applyText('title-add-dl', dict.titleAddDl); applyText('title-config-social', dict.titleConfigSocial); applyText('title-config-cats', dict.titleConfigCats); applyText('title-config-models', dict.titleConfigModels); applyText('title-config-maint', dict.titleConfigMaint);
+    applyText('header-viewer', dict.headerViewer); applyText('header-software', dict.headerSoftware); applyText('lbl-vi-none', dict.lblViNone); applyText('lbl-soft-none', dict.lblSoftNone); applyText('lbl-cfg-tags', dict.lblCfgTags); applyText('lbl-cat-fr', dict.lblCatFr); applyText('lbl-cat-en', dict.lblCatEn); applyText('lbl-cat-emo', dict.lblCatEmo); applyText('lbl-cat-type', dict.lblCatType); applyText('opt-cat-decors', dict.optCatDecors); applyText('opt-cat-style', dict.optCatStyle); applyText('lbl-select-model', dict.lblSelectModel); applyText('lbl-inject-tags', dict.lblInjectTags); applyText('lbl-edit-structure', dict.lblEditStructure); applyText('title-spons-list', dict.titleSponsList); applyText('title-ev-list', dict.titleEvList); applyText('lbl-perm-tags', dict.lblPermTags); applyText('lbl-auto-tags', dict.lblAutoTags);
+    applyText('btn-add-cat', dict.btnAddCat); applyText('btn-copy-flickr', dict.btnCopy); applyText('btn-copy-primfeed', dict.btnCopy); applyText('btn-add-dl', dict.btnAddDl); applyText('btn-create-model', dict.btnCreateModel);
+    document.querySelectorAll('.btn-add-txt').forEach(el => el.innerText = dict.btnAddTxt);
+    
+    // Apply placeholders robustly
+    applyPlc('titre', dict.phTitre); applyPlc('mood', dict.phMood); applyPlc('mus-l', dict.phMusL); applyPlc('mus-t', dict.phMusT); applyPlc('tags-manual', dict.phTagsManual); applyPlc('post-note', dict.phPostNote);
+    
+    // Dynamic rows placeholders
+    document.querySelectorAll('.row-b').forEach(el => el.placeholder = dict.rowPlcName);
+    document.querySelectorAll('.row-n').forEach(el => el.placeholder = dict.rowPlcArt);
+    document.querySelectorAll('.row-sl').forEach(el => el.placeholder = dict.rowPlcSlurl);
+    document.querySelectorAll('.row-mgr').forEach(el => el.placeholder = dict.rowPlcMgr);
+    document.querySelectorAll('.row-ev-n').forEach(el => el.placeholder = dict.rowPlcName);
+    
+    applyText('help-modal-main-title', dict.helpMainTitle); applyHtml('guide-container', dict.helpContent); applyText('btn-close-help', dict.btnCloseHelp);
+}
+
+function handleSmartInput(input, type) {
+    const val = input.value.trim(); const row = input.closest('.dynamic-row'); if(!row) return;
+    const saveBtn = row.querySelector('.btn-save-express');
+    if (lastKey === "Backspace" || lastKey === "Delete") return;
+    const data = (type === 'spons') ? sponsors : events;
+    const matchKey = Object.keys(data).find(k => k.startsWith(val.toLowerCase()));
+    if (val.length >= 3 && matchKey) {
+        const entry = data[matchKey]; input.value = entry.name;
+        if (type === 'spons') { 
+            let slEl = row.querySelector('.row-sl'); if(slEl) { slEl.value = entry.slurl || ""; slEl.dataset.isFromDB = "true"; }
+            let mgEl = row.querySelector('.row-mgr'); if(mgEl) mgEl.value = entry.mgr || "";
+        } else if (type === 'ev') { 
+            let evEl = row.querySelector('.row-ev-l'); if(evEl) { evEl.value = entry.url || ""; evEl.dataset.isFromDB = "true"; }
         }
-        const currentStructure = document.getElementById('model-body').value;
-        appModels[name] = currentStructure;
-        localStorage.setItem('SLProModels_v1', JSON.stringify(appModels));
-        nameInput.value = "";
-        buildModelSelector();
-        switchModel(name);
+        if(saveBtn) saveBtn.style.display = 'none'; update();
+    } else if (val.length >= 2) { if(saveBtn) saveBtn.style.display = 'inline-block'; }
+}
+
+function saveExpress(btn, type) {
+    const row = btn.closest('.dynamic-row'); if(!row) return;
+    if (type === 'spons') {
+        const name = row.querySelector('.row-b').value.trim(); if (!name) return;
+        sponsors[name.toLowerCase()] = { name, slurl: row.querySelector('.row-sl').value.trim(), mgr: row.querySelector('.row-mgr').value.trim() };
+        localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors));
+        row.querySelector('.row-sl').dataset.isFromDB = "true";
+    } else {
+        const name = row.querySelector('.row-ev-n').value.trim(); if (!name) return;
+        events[name.toLowerCase()] = { name, url: row.querySelector('.row-ev-l').value.trim() };
+        localStorage.setItem('SLProEv_v7', JSON.stringify(events));
+        row.querySelector('.row-ev-l').dataset.isFromDB = "true";
+    }
+    btn.style.display = 'none'; update();
+}
+
+function addDynamicRowFromStorage(target, defaultValue) {
+    const allKeys = Object.keys(appCategories);
+    let filteredKeys = allKeys.filter(k => (appCategories[k].type || "decors") === target);
+    addDynamicRow(target, defaultValue, filteredKeys);
+}
+
+function addDynamicRow(t, d, cats) {
+    const id = Math.random().toString(36).substr(2, 5); const div = document.createElement('div'); div.className = 'dynamic-row';
+    const dict = uiDictionary[currentLang];
+    div.innerHTML = `<button class="btn-del-row" onclick="this.parentElement.remove();update()">×</button>
+        <div style="display:flex; gap:10px; margin-bottom:10px;">
+            <div style="flex:0.5"><label>${dict.rowCat}</label><select class="row-cat" onchange="update()">${cats.map(c => `<option value="${c}" ${c===d?'selected':''}>${c}</option>`).join('')}</select></div>
+            <div style="flex:1"><label>${dict.rowBrand} <button class="btn-save-express" onclick="saveExpress(this, 'spons')">💾</button></label><input type="text" class="row-b" placeholder="${dict.rowPlcName}" oninput="handleSmartInput(this, 'spons')"></div>
+            <div style="flex:1"><label>${dict.rowArticle}</label><input type="text" class="row-n" placeholder="${dict.rowPlcArt}" oninput="update()"></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <div style="flex:1"><input type="text" class="row-sl" placeholder="${dict.rowPlcSlurl}" oninput="this.dataset.isFromDB='false';update()"></div>
+            <div style="flex:0.8"><input type="text" class="row-mgr" placeholder="${dict.rowPlcMgr}" oninput="update()"></div>
+        </div>
+        <div style="margin-top:10px;">
+            <label style="display:inline-flex; align-items:center; gap:8px; font-size:0.75rem; color:var(--accent); cursor:pointer;">
+                <input type="checkbox" class="row-ev-check" onchange="toggleEv('${id}')" style="width:auto; margin:0;"> ${dict.rowCheckEvent}
+            </label>
+        </div>
+        <div id="ev-box-${id}" style="display:none; margin-top:10px; gap:10px;">
+            <div style="flex:1"><label>${dict.rowEvName} <button class="btn-save-express btn-save-ev" onclick="saveExpress(this, 'ev')">💾</button></label><input type="text" class="row-ev-n" placeholder="${dict.rowPlcName}" oninput="handleSmartInput(this, 'ev')"></div>
+            <div style="flex:1"><label>${dict.rowEvLink}</label><input type="text" class="row-ev-l" placeholder="${dict.rowEvLink}..." oninput="this.dataset.isFromDB='false';update()"></div>
+        </div>`;
+    let container = document.getElementById(t + '-container');
+    if(container) { container.appendChild(div); }
+}
+
+function toggleEv(id) { let el = document.getElementById(`ev-box-${id}`); if(el) { el.style.display = el.style.display==='none'?'flex':'none'; update(); } }
+
+function buildModelSelector() {
+    const sel = document.getElementById('model-selector'); if(!sel) return;
+    let appModels = JSON.parse(localStorage.getItem('SLProModels_v1')) || {};
+    sel.innerHTML = "";
+    Object.keys(appModels).forEach(k => {
+        sel.innerHTML += `<option value="${k}" ${k === activeModelKey ? 'selected' : ''}>${k}</option>`;
+    });
+    const mb = document.getElementById('model-body');
+    if(mb) mb.value = appModels[activeModelKey] || "";
+}
+
+function update() {
+    const tEl = document.getElementById('titre'); const titre = tEl ? tEl.value.trim() : "";
+    const mEl = document.getElementById('mood'); const mood = mEl ? mEl.value.trim() : "";
+    const mlEl = document.getElementById('mus-l'); const musL = mlEl ? mlEl.value.trim() : "";
+    const mtEl = document.getElementById('mus-t'); const musT = mtEl ? mtEl.value.trim() : "";
+    
+    const cfg = JSON.parse(localStorage.getItem('SLProCfg_v7')) || {};
+    let tagsArr = []; let has = false;
+
+    let resTitreH = "", resTitreP = "";
+    if(titre) { resTitreH += `📷 ${titre}\n`; resTitreP += `📷 ${titre}\n`; has = true; }
+    if(mood) { resTitreH += `<i>"${mood}"</i>\n`; resTitreP += `"${mood}"\n`; has = true; }
+
+    let resMusicH = "", resMusicP = "";
+    if(musL) {
+        resMusicH += `🎵 <b>Music</b> : <a href="${musL}">${musT || 'Listen'}</a>\n`;
+        resMusicP += `🎵 Music : ${musT || 'Listen'} (${musL})\n`;
+        has = true;
     }
 
-    function update() {
-        const titre = document.getElementById('titre').value.trim(); const mood = document.getElementById('mood').value.trim();
-        const musL = document.getElementById('mus-l').value.trim(); const musT = document.getElementById('mus-t').value.trim();
-        const cfg = JSON.parse(localStorage.getItem('SLProCfg_v7')) || {};
-        let tagsArr = []; let has = false;
+    let compiledBlocks = { style: { h: "", p: "" }, decors: { h: "", p: "" } };
+    let hasElements = { style: false, decors: false };
+    
+    [['style','STYLE'],['decors','DECORS']].forEach(b => {
+        let directItems = []; let eventGroups = {}; 
+        document.querySelectorAll(`#${b[0]}-container .dynamic-row`).forEach(r => {
+            const brEl = r.querySelector('.row-b'); const br = brEl ? brEl.value.trim() : ""; 
+            const artEl = r.querySelector('.row-n'); const art = artEl ? artEl.value.trim() : "";
+            const catEl = r.querySelector('.row-cat'); const cat = catEl ? catEl.value : ""; 
+            const slEl = r.querySelector('.row-sl'); const sl = slEl ? slEl.value.trim() : "";
+            const isDB = slEl ? (slEl.dataset.isFromDB === "true") : false;
+            
+            const evCheckEl = r.querySelector('.row-ev-check'); const evCheck = evCheckEl ? evCheckEl.checked : false;
+            const evNEl = r.querySelector('.row-ev-n'); const evN = evNEl ? evNEl.value.trim() : "";
+            const evLEl = r.querySelector('.row-ev-l'); const evL = evLEl ? evLEl.value.trim() : "";
 
-        let resTitreH = "", resTitreP = "";
-        if(titre) { resTitreH += `📷 ${titre}\n`; resTitreP += `📷 ${titre}\n`; has = true; }
-        if(mood) { resTitreH += `<i>"${mood}"</i>\n`; resTitreP += `"${mood}"\n`; has = true; }
+            if(br || art) { 
+                has = true; hasElements[b[0]] = true; if(br) tagsArr.push(br.toLowerCase().replace(/\s+/g,'')); 
+                const currentEmo = appCategories[cat] ? appCategories[cat].emo : "🔹";
+                const currentTranslation = appCategories[cat] ? appCategories[cat].en : cat;
 
-        let resMusicH = "", resMusicP = "";
-        if(musL) {
-            resMusicH += `🎵 <b>Music</b> : <a href="${musL}">${musT || 'Listen'}</a>\n`;
-            resMusicP += `🎵 Music : ${musT || 'Listen'} (${musL})\n`;
-            has = true;
-        }
+                let itemData = { cat: cat, emo: currentEmo, trans: currentTranslation, brand: br, article: art, slurl: sl, isDB: isDB };
 
-        let compiledBlocks = { style: { h: "", p: "" }, decors: { h: "", p: "" } };
-        let hasElements = { style: false, decors: false };
-        
-        [['style','STYLE'],['decors','DECORS']].forEach(b => {
-            let directItems = [];
-            let eventGroups = {}; 
-
-            document.querySelectorAll(`#${b[0]}-container .dynamic-row`).forEach(r => {
-                const br = r.querySelector('.row-b').value.trim(); const art = r.querySelector('.row-n').value.trim();
-                const cat = r.querySelector('.row-cat').value; const sl = r.querySelector('.row-sl').value.trim();
-                const isDB = r.querySelector('.row-sl').dataset.isFromDB === "true";
-                const evCheck = r.querySelector('.row-ev-check')?.checked;
-                const evN = r.querySelector('.row-ev-n')?.value.trim();
-                const evL = r.querySelector('.row-ev-l')?.value.trim();
-
-                if(br || art) { 
-                    has = true; hasElements[b[0]] = true; if(br) tagsArr.push(br.toLowerCase().replace(/\s+/g,'')); 
-                    const currentEmo = appCategories[cat] ? appCategories[cat].emo : "🔹";
-                    const currentTranslation = appCategories[cat] ? appCategories[cat].en : cat;
-
-                    let itemData = {
-                        cat: cat,
-                        emo: currentEmo,
-                        trans: currentTranslation,
-                        brand: br,
-                        article: art,
-                        slurl: sl,
-                        isDB: isDB
-                    };
-
-                    if(evCheck && evN) {
-                        tagsArr.push(evN.toLowerCase().replace(/\s+/g,''));
-                        if (!eventGroups[evN]) {
-                            eventGroups[evN] = { url: evL || "", items: [] };
-                        }
-                        eventGroups[evN].items.push(itemData);
-                    } else {
-                        directItems.push(itemData);
-                    }
-                }
-            });
-
-            function formatSlurls(slurlStr, isFromDB) {
-                if(!slurlStr) return { h: "", p: "" };
-                const urls = slurlStr.split('|').map(u => u.trim()).filter(u => u);
-                if(urls.length === 0) return { h: "", p: "" };
-                
-                let htmlParts = [];
-                let plainParts = [];
-                const baseLabel = isFromDB ? "Store" : "Link";
-                
-                urls.forEach((url, index) => {
-                    const label = urls.length > 1 ? `${baseLabel} ${index + 1}` : baseLabel;
-                    htmlParts.push(`<a href="${url}">${label}</a>`);
-                    plainParts.push(`${label}: ${url}`);
-                });
-                
-                return {
-                    h: ` (${htmlParts.join(' | ')})`,
-                    p: ` (${plainParts.join(' | ')})`
-                };
+                if(evCheck && evN) {
+                    tagsArr.push(evN.toLowerCase().replace(/\s+/g,''));
+                    if (!eventGroups[evN]) { eventGroups[evN] = { url: evL || "", items: [] }; }
+                    eventGroups[evN].items.push(itemData);
+                } else { directItems.push(itemData); }
             }
+        });
 
-            directItems.forEach(item => {
+        function formatSlurls(slurlStr, isFromDB) {
+            if(!slurlStr) return { h: "", p: "" };
+            const urls = slurlStr.split('|').map(u => u.trim()).filter(u => u);
+            if(urls.length === 0) return { h: "", p: "" };
+            let htmlParts = []; let plainParts = [];
+            const baseLabel = isFromDB ? "Store" : "Link";
+            urls.forEach((url, index) => {
+                const label = urls.length > 1 ? `${baseLabel} ${index + 1}` : baseLabel;
+                htmlParts.push(`<a href="${url}">${label}</a>`);
+                plainParts.push(`${label}: ${url}`);
+            });
+            return { h: ` (${htmlParts.join(' | ')})`, p: ` (${plainParts.join(' | ')})` };
+        }
+
+        directItems.forEach(item => {
+            let lineH = `${item.emo} <b>${item.trans}</b> : ${item.brand}${item.article ? ` | ${item.article}` : ""}`;
+            let lineP = `${item.emo} ${item.trans} : ${item.brand}${item.article ? ` | ${item.article}` : ""}`;
+            const links = formatSlurls(item.slurl, item.isDB);
+            lineH += links.h; lineP += links.p;
+            compiledBlocks[b[0]].h += lineH + "\n"; compiledBlocks[b[0]].p += lineP + "\n";
+        });
+
+        Object.keys(eventGroups).sort().forEach(evN => {
+            const group = eventGroups[evN];
+            group.items.forEach(item => {
                 let lineH = `${item.emo} <b>${item.trans}</b> : ${item.brand}${item.article ? ` | ${item.article}` : ""}`;
                 let lineP = `${item.emo} ${item.trans} : ${item.brand}${item.article ? ` | ${item.article}` : ""}`;
-                
                 const links = formatSlurls(item.slurl, item.isDB);
-                lineH += links.h; 
-                lineP += links.p;
-                
+                lineH += links.h; lineP += links.p;
                 compiledBlocks[b[0]].h += lineH + "\n"; compiledBlocks[b[0]].p += lineP + "\n";
             });
 
-            Object.keys(eventGroups).sort().forEach(evN => {
-                const group = eventGroups[evN];
-                
-                group.items.forEach(item => {
-                    let lineH = `${item.emo} <b>${item.trans}</b> : ${item.brand}${item.article ? ` | ${item.article}` : ""}`;
-                    let lineP = `${item.emo} ${item.trans} : ${item.brand}${item.article ? ` | ${item.article}` : ""}`;
-                    
-                    const links = formatSlurls(item.slurl, item.isDB);
-                    lineH += links.h; 
-                    lineP += links.p;
-                    
-                    compiledBlocks[b[0]].h += lineH + "\n"; compiledBlocks[b[0]].p += lineP + "\n";
-                });
-
-                if(group.url) {
-                    compiledBlocks[b[0]].h += `🛍️ <i>You can find these items at</i> <a href="${group.url}"><b>${evN}</b></a>\n`;
-                    compiledBlocks[b[0]].p += `🛍️ You can find these items at ${evN} (${group.url})\n`;
-                } else {
-                    compiledBlocks[b[0]].h += `🛍️ <i>You can find these items at</i> <b>${evN}</b>\n`;
-                    compiledBlocks[b[0]].p += `🛍️ You can find these items at ${evN}\n`;
-                }
-            });
-        });
-
-        let resSettingsH = "", resSettingsP = "";
-        let hasSettings = false;
-        const vi = document.querySelector('input[name="vi"]:checked')?.value; const soft = document.querySelector('input[name="soft"]:checked')?.value; const note = document.getElementById('post-note').value.trim();
-        if(vi || soft || note) { 
-            has = true; hasSettings = true;
-            if(vi) { resSettingsH += `💻 <b>Viewer</b> : ${vi}\n`; resSettingsP += `💻 Viewer : ${vi}\n`; }
-            if(soft) { resSettingsH += `🎨 <b>Processing</b> : ${soft}\n`; resSettingsP += `🎨 Processing : ${soft}\n`; }
-            if(note) { resSettingsH += `📝 <b>Notes</b> : ${note}\n`; resSettingsP += `📝 Notes : ${note}\n`; }
-        }
-
-        const socialKeys = [{id:'f',label:'Flickr'},{id:'p',label:'Primfeed'},{id:'i',label:'Instagram'},{id:'fb',label:'Facebook'},{id:'x',label:'X'},{id:'tk',label:'Tiktok'}];
-        let hLinks = []; let pLinks = [];
-        socialKeys.forEach(s => { 
-            if(cfg[s.id]) { 
-                hLinks.push(`<a href="${cfg[s.id]}">${s.label}</a>`); 
-                pLinks.push(`${s.label} (${cfg[s.id]})`); 
-            } 
-        });
-
-        let resSocialH = hLinks.join('\n');
-        let resSocialP = pLinks.join('\n');
-
-        const mt = document.getElementById('tags-manual').value.split(',').map(t=>t.trim().toLowerCase().replace(/\s+/g,'')).filter(t=>t);
-        const pt = (cfg.tags || "").split(',').map(t=>t.trim().toLowerCase().replace(/\s+/g,'')).filter(t=>t);
-        document.getElementById('tags-permanent-display').innerText = pt.join(' ') || "Aucun.";
-        document.getElementById('auto-tags-display').innerText = [...new Set(tagsArr)].join(' ') || "Aucun.";
-        const tags = [...new Set([...tagsArr, ...mt, ...pt])].join(' ');
-
-        let templateRaw = appModels[activeModelKey] || defaultModels["Modèle Standard (Diamants)"];
-        
-        templateRaw = templateRaw.replace(/[^\n]*{SOCIAL}/g, '\n{SOCIAL}');
-
-        function renderSectionWithStructure(templateStr, startTag, endTag, isPresent, fallbackKeyword) {
-            let regex = new RegExp(startTag.replace('[','\\[').replace(']','\\]') + '([\\s\\S]*?)' + endTag.replace('[','\\[').replace(']','\\]'), 'g');
-            
-            if (templateStr.match(regex)) {
-                return templateStr.replace(regex, isPresent ? `$1` : '');
+            if(group.url) {
+                compiledBlocks[b[0]].h += `🛍️ <i>You can find these items at</i> <a href="${group.url}"><b>${evN}</b></a>\n`;
+                compiledBlocks[b[0]].p += `🛍️ You can find these items at ${evN} (${group.url})\n`;
             } else {
-                let lines = templateStr.split('\n');
-                let output = [];
-                for(let i=0; i<lines.length; i++) {
-                    if (lines[i].includes(fallbackKeyword)) {
-                        if(!isPresent) {
-                            if(output.length > 0 && (output[output.length-1].toLowerCase().includes(fallbackKeyword.toLowerCase().replace('{','').replace('}','')) || output[output.length-1].includes('━') || output[output.length-1].includes('---'))) {
-                                output.pop();
-                            }
-                            continue;
-                        }
-                    }
-                    output.push(lines[i]);
-                }
-                return output.join('\n');
+                compiledBlocks[b[0]].h += `🛍️ <i>You can find these items at</i> <b>${evN}</b>\n`;
+                compiledBlocks[b[0]].p += `🛍️ You can find these items at ${evN}\n`;
             }
-        }
-
-        let templateH = templateRaw;
-        templateH = renderSectionWithStructure(templateH, '[STYLE]', '[/STYLE]', hasElements.style, '{STYLE}');
-        templateH = renderSectionWithStructure(templateH, '[DECORS]', '[/DECORS]', hasElements.decors, '{DECORS}');
-        templateH = renderSectionWithStructure(templateH, '[SETTINGS]', '[/SETTINGS]', hasSettings, '{SETTINGS}');
-        templateH = renderSectionWithStructure(templateH, '[SOCIAL]', '[/SOCIAL]', hLinks.length > 0, '{SOCIAL}');
-        templateH = renderSectionWithStructure(templateH, '[TAGS]', '[/TAGS]', tags.trim().length > 0, '{TAGS}');
-
-        let templateP = templateRaw.replace(/<b>/g, '').replace(/<\/b>/g, '').replace(/<i>/g, '').replace(/<\/i>/g, '');
-        templateP = renderSectionWithStructure(templateP, '[STYLE]', '[/STYLE]', hasElements.style, '{STYLE}');
-        templateP = renderSectionWithStructure(templateP, '[DECORS]', '[/DECORS]', hasElements.decors, '{DECORS}');
-        templateP = renderSectionWithStructure(templateP, '[SETTINGS]', '[/SETTINGS]', hasSettings, '{SETTINGS}');
-        templateP = renderSectionWithStructure(templateP, '[SOCIAL]', '[/SOCIAL]', pLinks.length > 0, '{SOCIAL}');
-        templateP = renderSectionWithStructure(templateP, '[TAGS]', '[/TAGS]', tags.trim().length > 0, '{TAGS}');
-
-        let finalH = templateH
-            .replace(/{TITRE}/g, resTitreH.trim())
-            .replace(/{MUSIC}/g, resMusicH.trim())
-            .replace(/{STYLE}/g, compiledBlocks.style.h.trim())
-            .replace(/{DECORS}/g, compiledBlocks.decors.h.trim())
-            .replace(/{SETTINGS}/g, resSettingsH.trim())
-            .replace(/{SOCIAL}/g, resSocialH.trim())
-            .replace(/{TAGS}/g, tags.trim());
-
-        let cleanTitreP = resTitreP.trim().replace(/<[^>]*>/g, '');
-        let cleanMusicP = resMusicP.trim().replace(/<[^>]*>/g, '');
-        let cleanStyleP = compiledBlocks.style.p.trim().replace(/<[^>]*>/g, '');
-        let cleanDecorsP = compiledBlocks.decors.p.trim().replace(/<[^>]*>/g, '');
-        let cleanSettingsP = resSettingsP.trim().replace(/<[^>]*>/g, '');
-        let cleanSocialP = resSocialP.trim().replace(/<[^>]*>/g, '');
-
-        let finalP = templateP
-            .replace(/{TITRE}/g, cleanTitreP)
-            .replace(/{MUSIC}/g, cleanMusicP)
-            .replace(/{STYLE}/g, cleanStyleP)
-            .replace(/{DECORS}/g, cleanDecorsP)
-            .replace(/{SETTINGS}/g, cleanSettingsP)
-            .replace(/{SOCIAL}/g, cleanSocialP)
-            .replace(/{TAGS}/g, "");
-
-        finalH = finalH.replace(/\n{3,}/g, '\n\n');
-        finalP = finalP.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
-
-        const structuralTagsRegex = /\[\/?(STYLE|DECORS|SETTINGS|SOCIAL|TAGS)\]/g;
-        finalH = finalH.replace(structuralTagsRegex, '');
-        finalP = finalP.replace(structuralTagsRegex, '');
-
-        // NETTOYAGE PROFOND : Suppression des lignes blanches résiduelles excessives dans Primfeed
-        finalP = finalP.replace(/\n{3,}/g, '\n\n').trim();
-
-        document.getElementById('render-f').innerHTML = has ? finalH.replace(/\n/g, '<br>') : "";
-        
-        // Stockage de la chaîne BRUTE (avec \n) pour la copie fidéle
-        primfeedDataCache = has ? finalP : "";
-        
-        // Affichage visuel (HTML) avec <br> pour garder la mise en page de l'aperçu
-        document.getElementById('render-p').innerHTML = has ? finalP.replace(/\n/g, '<br>') : "";
-    }
-
-    function renderDB() {
-        const sL = document.getElementById('list-sponsors'); sL.innerHTML = "";
-        Object.keys(sponsors).sort().forEach(k => { sL.innerHTML += `<div class="db-tag"><b>${sponsors[k].name}</b><div class="db-tag-actions"><span onclick="openEdit('s','${k}')" style="cursor:pointer">✏️</span><span onclick="delItem('spons','${k}')" style="cursor:pointer;color:var(--danger)">×</span></div></div>`; });
-        const eL = document.getElementById('list-events'); eL.innerHTML = "";
-        Object.keys(events).sort().forEach(k => { eL.innerHTML += `<div class="db-tag"><b>${events[k].name}</b><div class="db-tag-actions"><span onclick="openEdit('e','${k}')" style="cursor:pointer">✏️</span><span onclick="delItem('ev','${k}')" style="cursor:pointer;color:var(--danger)">×</span></div></div>`; });
-    }
-    
-    function renderCustomCategories() {
-        const list = document.getElementById('list-custom-cats'); list.innerHTML = "";
-        Object.keys(appCategories).forEach(k => {
-            const currentType = appCategories[k].type === 'style' ? '✨ Style' : '🏠 Décors';
-            list.innerHTML += `<div class="db-tag"><span>${appCategories[k].emo}</span> <b>${k} (${appCategories[k].en})</b> <small style="color:var(--accent); margin-left:5px;">[${currentType}]</small><div class="db-tag-actions"><span onclick="openCatEdit('${k}')" style="cursor:pointer">✏️</span><span onclick="deleteCategory('${k}')" style="cursor:pointer;color:var(--danger)">×</span></div></div>`;
         });
-    }
+    });
 
-    function openCatEdit(k) {
-        const catData = appCategories[k];
-        if (!catData) return;
-        
-        document.getElementById('cat-edit-old-key').value = k;
-        document.getElementById('cat-edit-id').value = k;
-        document.getElementById('cat-edit-en').value = catData.en || k;
-        document.getElementById('cat-edit-emo').value = catData.emo || "🔹";
-        document.getElementById('cat-edit-type').value = catData.type || "decors";
-        
-        document.getElementById('cat-edit-overlay').style.display = 'flex';
-    }
-
-    function closeCatEdit() {
-        document.getElementById('cat-edit-overlay').style.display = 'none';
-    }
-
-    function saveCatEdit() {
-        const oldKey = document.getElementById('cat-edit-old-key').value;
-        const newKey = document.getElementById('cat-edit-id').value.trim();
-        const newEn = document.getElementById('cat-edit-en').value.trim();
-        const newEmo = document.getElementById('cat-edit-emo').value.trim();
-        const newType = document.getElementById('cat-edit-type').value;
-
-        if (!newKey || !newEn) {
-            alert("Le nom français et la traduction anglaise sont obligatoires.");
-            return;
-        }
-
-        if (newKey !== oldKey) {
-            delete appCategories[oldKey];
-        }
-
-        appCategories[newKey] = {
-            emo: newEmo || "🔹",
-            en: newEn,
-            type: newType
-        };
-
-        localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
-        closeCatEdit();
-        renderCustomCategories();
-        update();
-    }
-
-    function addCustomCategory() {
-        const fName = document.getElementById('new-cat-id').value.trim();
-        const eName = document.getElementById('new-cat-en').value.trim();
-        const emo = document.getElementById('new-cat-emo').value.trim();
-        const type = document.getElementById('new-cat-type').value; 
-        
-        if(!fName || !eName) return;
-        
-        appCategories[fName] = { emo: emo || "🔹", en: eName, type: type };
-        localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
-        
-        document.getElementById('new-cat-id').value = ''; document.getElementById('new-cat-en').value = ''; document.getElementById('new-cat-emo').value = '';
-        renderCustomCategories(); update();
-    }
-
-    function deleteCategory(k) {
-        if(!confirm(`Supprimer la catégorie "${k}" ?`)) return;
-        delete appCategories[k];
-        localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
-        renderCustomCategories(); update();
-    }
-
-    function saveQuick(type) {
-        if(type==='spons') { let n = document.getElementById('qs-n').value.trim(); if(!n) return; sponsors[n.toLowerCase()] = { name: n, mgr: document.getElementById('qs-m').value.trim(), slurl: document.getElementById('qs-l').value.trim() }; localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors)); }
-        else { let n = document.getElementById('qe-n').value.trim(); if(!n) return; events[n.toLowerCase()] = { name: n, url: document.getElementById('qe-l').value.trim() }; localStorage.setItem('SLProEv_v7', JSON.stringify(events)); }
-        renderDB();
-    }
-    function addDeadline() { const n = document.getElementById('dl-name').value; const d = document.getElementById('dl-date').value; if(n && d) { deadlines.push({ id: Date.now(), name: n, date: d }); localStorage.setItem('SLProDeadlines_v1', JSON.stringify(deadlines)); renderDeadlines(); checkDeadlinesAlert(); } }
-    function renderDeadlines() {
-        const list = document.getElementById('list-deadlines'); list.innerHTML = ''; deadlines.sort((a,b) => new Date(a.date) - new Date(b.date));
-        deadlines.forEach(dl => { const diff = Math.ceil((new Date(dl.date) - new Date()) / 86400000); list.innerHTML += `<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center;"><div><span class="dl-status ${diff<=2?'status-crit':diff<=5?'status-warn':'status-ok'}"></span><b>${dl.name}</b> - ${dl.date}</div><span style="cursor:pointer; color:var(--danger);" onclick="deleteDeadline(${dl.id})">×</span></div>`; });
-    }
-    function checkDeadlinesAlert() { const navDl = document.getElementById('nav-dl'); const urgent = deadlines.some(dl => (new Date(dl.date) - new Date()) / 86400000 <= 2); urgent ? navDl.classList.add('badge-alert') : navDl.classList.remove('badge-alert'); }
-    function deleteDeadline(id) { deadlines = deadlines.filter(d => d.id !== id); localStorage.setItem('SLProDeadlines_v1', JSON.stringify(deadlines)); renderDeadlines(); checkDeadlinesAlert(); }
-    function openEdit(type, k) {
-        document.getElementById('edit-overlay').style.display = 'flex'; document.getElementById('edit-id').value = k; document.getElementById('edit-type').value = type;
-        if(type === 's') { document.getElementById('edit-title').innerText = "Editer : " + sponsors[k].name; document.getElementById('edit-val-1').value = sponsors[k].slurl || ""; document.getElementById('edit-lbl-2').style.display = 'block'; document.getElementById('edit-val-2').style.display = 'block'; document.getElementById('edit-val-2').value = sponsors[k].mgr || ""; }
-        else { document.getElementById('edit-title').innerText = "Editer : " + events[k].name; document.getElementById('edit-val-1').value = events[k].url || ""; document.getElementById('edit-lbl-2').style.display = 'none'; document.getElementById('edit-val-2').style.display = 'none'; }
-    }
-    function closeEdit() { document.getElementById('edit-overlay').style.display = 'none'; }
-    function saveEdit() {
-        const k = document.getElementById('edit-id').value; const type = document.getElementById('edit-type').value;
-        if(type === 's') { sponsors[k].slurl = document.getElementById('edit-val-1').value; sponsors[k].mgr = document.getElementById('edit-val-2').value; localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors)); }
-        else { events[k].url = document.getElementById('edit-val-1').value; localStorage.setItem('SLProEv_v7', JSON.stringify(events)); }
-        renderDB(); closeEdit();
-    }
-    function saveCfg() { let d = {}; ["f","p","i","fb","x","tk"].forEach(k => { d[k] = document.getElementById('cfg-'+k).value; }); d.tags = document.getElementById('cfg-tags').value; localStorage.setItem('SLProCfg_v7', JSON.stringify(d)); update(); }
-    function loadCfg() { const d = JSON.parse(localStorage.getItem('SLProCfg_v7')); if(d) { ["f","p","i","fb","x","tk"].forEach(k => { if(document.getElementById('cfg-'+k)) document.getElementById('cfg-'+k).value = d[k] || ''; }); document.getElementById('cfg-tags').value = d.tags || ''; update(); } }
+    let resSettingsH = "", resSettingsP = ""; let hasSettings = false;
+    const viEl = document.querySelector('input[name="vi"]:checked'); const vi = viEl ? viEl.value : ""; 
+    const softEl = document.querySelector('input[name="soft"]:checked'); const soft = softEl ? softEl.value : ""; 
+    const noteEl = document.getElementById('post-note'); const note = noteEl ? noteEl.value.trim() : "";
     
-    function clearForm() { if(confirm("Vider ?")) { document.getElementById('titre').value=''; document.getElementById('mood').value=''; document.getElementById('mus-l').value=''; document.getElementById('mus-t').value=''; document.getElementById('tags-manual').value=''; document.getElementById('post-note').value=''; document.getElementById('style-container').innerHTML = ''; document.getElementById('decors-container').innerHTML = ''; update(); } }
-    function toggleOverlay(id) { let el = document.getElementById(id); el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; }
-    function toggleQA(id) { let el = document.getElementById(id); el.style.display = (el.style.display==='none')?'block':'none';}
-    function delItem(type, k) { if(!confirm("Supprimer ?")) return; delete (type==='spons' ? sponsors[k] : events[k]); localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors)); localStorage.setItem('SLProEv_v7', JSON.stringify(events)); renderDB(); }
-    
-    function copyFlickr() {
-        const cleanHTML = document.getElementById('render-f').innerHTML.replace(/<br>/g, '\n');
-        navigator.clipboard.writeText(cleanHTML);
+    if(vi || soft || note) { 
+        has = true; hasSettings = true;
+        if(vi) { resSettingsH += `💻 <b>Viewer</b> : ${vi}\n`; resSettingsP += `💻 Viewer : ${vi}\n`; }
+        if(soft) { resSettingsH += `🎨 <b>Processing</b> : ${soft}\n`; resSettingsP += `🎨 Processing : ${soft}\n`; }
+        if(note) { resSettingsH += `📝 <b>Notes</b> : ${note}\n`; resSettingsP += `📝 Notes : ${note}\n`; }
     }
-    
-    async function copyText() {
-        if (!primfeedDataCache) return;
-        
-        const plainContent = primfeedDataCache;
-        
-        // Transform plain text lines into clean HTML paragraphs so rich text editors (Tiptap/ProseMirror) preserve breaks
-        const htmlContent = primfeedDataCache
-            .split('\n')
-            .map(line => {
-                if (line.trim() === '') return '<p><br></p>';
-                const safeLine = line
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;');
-                return `<p>${safeLine}</p>`;
-            })
-            .join('');
 
-        try {
-            // Modern API method (works flawlessly on HTTPS / GitHub Pages)
-            const clipboardItem = new ClipboardItem({
-                'text/plain': new Blob([plainContent], { type: 'text/plain' }),
-                'text/html': new Blob([htmlContent], { type: 'text/html' })
-            });
-            await navigator.clipboard.write([clipboardItem]);
-        } catch (err) {
-            // ULTRA-ROBUST FALLBACK FOR LOCAL TESTING (file://)
-            // Intercepts the copy event to inject rich HTML even when browser permissions block the modern API locally
-            const listener = function(e) {
-                e.clipboardData.setData('text/html', htmlContent);
-                e.clipboardData.setData('text/plain', plainContent);
-                e.preventDefault();
-            };
-            document.addEventListener('copy', listener);
-            document.execCommand('copy');
-            document.removeEventListener('copy', listener);
-        }
-    }
-    function toggleTheme() { document.body.classList.toggle('light-theme'); }
+    const socialKeys = [{id:'f',label:'Flickr'},{id:'p',label:'Primfeed'},{id:'i',label:'Instagram'},{id:'fb',label:'Facebook'},{id:'x',label:'X'},{id:'tk',label:'Tiktok'}];
+    let hLinks = []; let pLinks = [];
+    socialKeys.forEach(s => { if(cfg[s.id]) { hLinks.push(`<a href="${cfg[s.id]}">${s.label}</a>`); pLinks.push(`${s.label} (${cfg[s.id]})`); } });
+
+    let resSocialH = hLinks.join('\n'); let resSocialP = pLinks.join('\n');
+
+    const tmEl = document.getElementById('tags-manual');
+    const mt = tmEl ? tmEl.value.split(',').map(t=>t.trim().toLowerCase().replace(/\s+/g,'')).filter(t=>t) : [];
+    const pt = (cfg.tags || "").split(',').map(t=>t.trim().toLowerCase().replace(/\s+/g,'')).filter(t=>t);
     
-    function exportData() { 
-        const blob = new Blob([JSON.stringify({
-            sponsors, 
-            events, 
-            deadlines, 
-            categories: appCategories, 
-            models: appModels,
-            activeModel: activeModelKey,
-            config: JSON.parse(localStorage.getItem('SLProCfg_v7'))
-        }, null, 2)], {type: 'application/json'}); 
-        const a = document.createElement('a'); 
-        a.href = URL.createObjectURL(blob); 
-        a.download = `backup_proflow.json`; 
-        a.click(); 
-    }
+    const textNone = (currentLang === "EN") ? "None." : "Aucun.";
+    let permTagsDisp = document.getElementById('tags-permanent-display'); if(permTagsDisp) permTagsDisp.innerText = pt.join(' ') || textNone;
+    let autoTagsDisp = document.getElementById('auto-tags-display'); if(autoTagsDisp) autoTagsDisp.innerText = [...new Set(tagsArr)].join(' ') || textNone;
     
-    function importData(event) {
-        const file = event.target.files[0]; if (!file) return;
-        const reader = new FileReader(); reader.onload = (e) => {
-            const data = JSON.parse(e.target.result);
-            if(confirm("Importer les données ?")) {
-                localStorage.setItem('SLProSpons_v7', JSON.stringify(data.sponsors || {}));
-                localStorage.setItem('SLProEv_v7', JSON.stringify(data.events || {}));
-                localStorage.setItem('SLProDeadlines_v1', JSON.stringify(data.deadlines || []));
-                localStorage.setItem('SLProCategories_v1', JSON.stringify(data.categories || defaultCats));
-                localStorage.setItem('SLProModels_v1', JSON.stringify(data.models || defaultModels));
-                localStorage.setItem('SLProActiveModel_v1', data.activeModel || "Modèle Standard (Diamants)");
-                localStorage.setItem('SLProCfg_v7', JSON.stringify(data.config || {}));
-                location.reload();
+    const tags = [...new Set([...tagsArr, ...mt, ...pt])].join(' ');
+
+    let appModels = JSON.parse(localStorage.getItem('SLProModels_v1')) || {};
+    let templateRaw = appModels[activeModelKey] || "{TITRE}\n{MUSIC}\n[STYLE]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>STYLE</b>\n{STYLE}\n[/STYLE][DECORS]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>DECORS</b>\n{DECORS}\n[/DECORS][SETTINGS]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>⚙️ SETTINGS</b>\n{SETTINGS}\n[/SETTINGS][SOCIAL]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\nFollow me on social media\n{SOCIAL}\n[/SOCIAL]\n[TAGS]━━━━━━━━━━━ ✦ ━━━━━━━━━━━\n<b>TAGS</b>\n{TAGS}[/TAGS]";
+    templateRaw = templateRaw.replace(/[^\n]*{SOCIAL}/g, '\n{SOCIAL}');
+
+    function renderSectionWithStructure(templateStr, startTag, endTag, isPresent, fallbackKeyword) {
+        let regex = new RegExp(startTag.replace('[','\\[').replace(']','\\]') + '([\\s\\S]*?)' + endTag.replace('[','\\[').replace(']','\\]'), 'g');
+        if (templateStr.match(regex)) { return templateStr.replace(regex, isPresent ? `$1` : ''); } 
+        else {
+            let lines = templateStr.split('\n'); let output = [];
+            for(let i=0; i<lines.length; i++) {
+                if (lines[i].includes(fallbackKeyword)) {
+                    if(!isPresent) {
+                        if(output.length > 0 && (output[output.length-1].toLowerCase().includes(fallbackKeyword.toLowerCase().replace('{','').replace('}','')) || output[output.length-1].includes('━') || output[output.length-1].includes('---'))) { output.pop(); }
+                        continue;
+                    }
+                }
+                output.push(lines[i]);
             }
-        }; reader.readAsText(file);
+            return output.join('\n');
+        }
     }
+
+    let templateH = templateRaw;
+    templateH = renderSectionWithStructure(templateH, '[STYLE]', '[/STYLE]', hasElements.style, '{STYLE}');
+    templateH = renderSectionWithStructure(templateH, '[DECORS]', '[/DECORS]', hasElements.decors, '{DECORS}');
+    templateH = renderSectionWithStructure(templateH, '[SETTINGS]', '[/SETTINGS]', hasSettings, '{SETTINGS}');
+    templateH = renderSectionWithStructure(templateH, '[SOCIAL]', '[/SOCIAL]', hLinks.length > 0, '{SOCIAL}');
+    templateH = renderSectionWithStructure(templateH, '[TAGS]', '[/TAGS]', tags.trim().length > 0, '{TAGS}');
+
+    let templateP = templateRaw.replace(/<b>/g, '').replace(/<\/b>/g, '').replace(/<i>/g, '').replace(/<\/i>/g, '');
+    templateP = renderSectionWithStructure(templateP, '[STYLE]', '[/STYLE]', hasElements.style, '{STYLE}');
+    templateP = renderSectionWithStructure(templateP, '[DECORS]', '[/DECORS]', hasElements.decors, '{DECORS}');
+    templateP = renderSectionWithStructure(templateP, '[SETTINGS]', '[/SETTINGS]', hasSettings, '{SETTINGS}');
+    templateP = renderSectionWithStructure(templateP, '[SOCIAL]', '[/SOCIAL]', pLinks.length > 0, '{SOCIAL}');
+    templateP = renderSectionWithStructure(templateP, '[TAGS]', '[/TAGS]', tags.trim().length > 0, '{TAGS}');
+
+    let finalH = templateH
+        .replace(/{TITRE}/g, resTitreH.trim()).replace(/{MUSIC}/g, resMusicH.trim())
+        .replace(/{STYLE}/g, compiledBlocks.style.h.trim()).replace(/{DECORS}/g, compiledBlocks.decors.h.trim())
+        .replace(/{SETTINGS}/g, resSettingsH.trim()).replace(/{SOCIAL}/g, resSocialH.trim()).replace(/{TAGS}/g, tags.trim());
+
+    let cleanTitreP = resTitreP.trim().replace(/<[^>]*>/g, ''); let cleanMusicP = resMusicP.trim().replace(/<[^>]*>/g, '');
+    let cleanStyleP = compiledBlocks.style.p.trim().replace(/<[^>]*>/g, ''); let cleanDecorsP = compiledBlocks.decors.p.trim().replace(/<[^>]*>/g, '');
+    let cleanSettingsP = resSettingsP.trim().replace(/<[^>]*>/g, ''); let cleanSocialP = resSocialP.trim().replace(/<[^>]*>/g, '');
+
+    let finalP = templateP
+        .replace(/{TITRE}/g, cleanTitreP).replace(/{MUSIC}/g, cleanMusicP)
+        .replace(/{STYLE}/g, cleanStyleP).replace(/{DECORS}/g, cleanDecorsP)
+        .replace(/{SETTINGS}/g, cleanSettingsP).replace(/{SOCIAL}/g, cleanSocialP).replace(/{TAGS}/g, "");
+
+    finalH = finalH.replace(/\n{3,}/g, '\n\n'); finalP = finalP.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    const structuralTagsRegex = /\[\/?(STYLE|DECORS|SETTINGS|SOCIAL|TAGS)\]/g;
+    finalH = finalH.replace(structuralTagsRegex, ''); finalP = finalP.replace(structuralTagsRegex, '');
+    finalP = finalP.replace(/\n{3,}/g, '\n\n').trim();
+
+    const rf = document.getElementById('render-f'); if(rf) rf.innerHTML = has ? finalH.replace(/\n/g, '<br>') : "";
+    primfeedDataCache = has ? finalP : "";
+    const rp = document.getElementById('render-p'); if(rp) rp.innerHTML = has ? finalP.replace(/\n/g, '<br>') : "";
+}
+
+function saveCfg() { 
+    let d = {}; ["f","p","i","fb","x","tk"].forEach(k => { let el = document.getElementById('cfg-'+k); d[k] = el ? el.value : ""; }); 
+    let tEl = document.getElementById('cfg-tags'); d.tags = tEl ? tEl.value : ""; 
+    localStorage.setItem('SLProCfg_v7', JSON.stringify(d)); update(); 
+}
+
+function loadCfg() { 
+    const d = JSON.parse(localStorage.getItem('SLProCfg_v7')); 
+    if(d) { ["f","p","i","fb","x","tk"].forEach(k => { let el = document.getElementById('cfg-'+k); if(el) el.value = d[k] || ''; }); 
+    let tEl = document.getElementById('cfg-tags'); if(tEl) tEl.value = d.tags || ''; update(); } 
+}
+
+function clearForm() { 
+    if(confirm(uiDictionary[currentLang].confirmClear)) { 
+        ['titre','mood','mus-l','mus-t','tags-manual','post-note'].forEach(id => { let el = document.getElementById(id); if(el) el.value = ''; }); 
+        let scEl = document.getElementById('style-container'); if(scEl) scEl.innerHTML = ''; 
+        let dcEl = document.getElementById('decors-container'); if(dcEl) dcEl.innerHTML = ''; 
+        const radioViNone = document.querySelector('input[name="vi"][value=""]'); if(radioViNone) radioViNone.checked = true;
+        const radioSoftNone = document.querySelector('input[name="soft"][value=""]'); if(radioSoftNone) radioSoftNone.checked = true;
+        ["f","p","i","fb","x","tk"].forEach(k => { let el = document.getElementById('cfg-'+k); if(el) el.value = ''; });
+        let ctEl = document.getElementById('cfg-tags'); if(ctEl) ctEl.value = '';
+        saveCfg(); update(); 
+    } 
+}
+
+function toggleOverlay(id) { let el = document.getElementById(id); if(el) el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; }
+function toggleQA(id) { let el = document.getElementById(id); if(el) el.style.display = (el.style.display==='none')?'block':'none'; }
+function renderDB() { 
+    const sL = document.getElementById('list-sponsors'); if(sL) { sL.innerHTML = ""; Object.keys(sponsors).sort().forEach(k => { sL.innerHTML += `<div class="db-tag"><b>${sponsors[k].name}</b><div class="db-tag-actions"><span onclick="openEdit('s','${k}')" style="cursor:pointer">✏️</span><span onclick="delItem('spons','${k}')" style="cursor:pointer;color:var(--danger)">×</span></div></div>`; }); } 
+    const eL = document.getElementById('list-events'); if(eL) { eL.innerHTML = ""; Object.keys(events).sort().forEach(k => { eL.innerHTML += `<div class="db-tag"><b>${events[k].name}</b><div class="db-tag-actions"><span onclick="openEdit('e','${k}')" style="cursor:pointer">✏️</span><span onclick="delItem('ev','${k}')" style="cursor:pointer;color:var(--danger)">×</span></div></div>`; }); } 
+}
+
+function renderDeadlines() { 
+    const list = document.getElementById('list-deadlines'); if(!list) return; list.innerHTML = ''; deadlines.sort((a,b) => new Date(a.date) - new Date(b.date)); deadlines.forEach(dl => { const diff = Math.ceil((new Date(dl.date) - new Date()) / 86400000); list.innerHTML += `<div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center;"><div><span class="dl-status ${diff<=2?'status-crit':diff<=5?'status-warn':'status-ok'}"></span><b>${dl.name}</b> - ${dl.date}</div><span style="cursor:pointer; color:var(--danger);" onclick="deleteDeadline(${dl.id})">×</span></div>`; }); 
+}
+
+function renderCustomCategories() { 
+    const list = document.getElementById('list-custom-cats'); if(!list) return; list.innerHTML = ""; Object.keys(appCategories).forEach(k => { const currentType = appCategories[k].type === 'style' ? '✨ Style' : ((currentLang === "EN") ? '🏠 Decors' : '🏠 Décors'); list.innerHTML += `<div class="db-tag"><span>${appCategories[k].emo}</span> <b>${k} (${appCategories[k].en})</b> <small style="color:var(--accent); margin-left:5px;">[${currentType}]</small><div class="db-tag-actions"><span onclick="openCatEdit('${k}')" style="cursor:pointer">✏️</span><span onclick="deleteCategory('${k}')" style="cursor:pointer;color:var(--danger)">×</span></div></div>`; }); 
+}
+
+function checkDeadlinesAlert() { 
+    const navDl = document.getElementById('nav-dl'); if(!navDl) return; const urgent = deadlines.some(dl => (new Date(dl.date) - new Date()) / 86400000 <= 2); urgent ? navDl.classList.add('badge-alert') : navDl.classList.remove('badge-alert'); 
+}
+
+function deleteDeadline(id) { deadlines = deadlines.filter(d => d.id !== id); localStorage.setItem('SLProDeadlines_v1', JSON.stringify(deadlines)); renderDeadlines(); checkDeadlinesAlert(); }
+
+function delItem(type, k) { 
+    if(!confirm(uiDictionary[currentLang].confirmDelItem)) return; 
+    if(type==='spons') { delete sponsors[k]; } else { delete events[k]; }
+    localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors)); localStorage.setItem('SLProEv_v7', JSON.stringify(events)); renderDB(); 
+}
+
+function openEdit(type, k) { 
+    let eOvl = document.getElementById('edit-overlay'); if(eOvl) eOvl.style.display = 'flex'; 
+    let eId = document.getElementById('edit-id'); if(eId) eId.value = k; 
+    let eType = document.getElementById('edit-type'); if(eType) eType.value = type;
+    const dict = uiDictionary[currentLang];
+    if(type === 's') { 
+        let eTitle = document.getElementById('edit-title'); if(eTitle) eTitle.innerText = dict.editTitleSpons + sponsors[k].name; 
+        let eVal1 = document.getElementById('edit-val-1'); if(eVal1) eVal1.value = sponsors[k].slurl || ""; 
+        let eLbl2 = document.getElementById('edit-lbl-2'); if(eLbl2) eLbl2.style.display = 'block'; 
+        let eVal2 = document.getElementById('edit-val-2'); if(eVal2) { eVal2.style.display = 'block'; eVal2.value = sponsors[k].mgr || ""; }
+    } else { 
+        let eTitle = document.getElementById('edit-title'); if(eTitle) eTitle.innerText = dict.editTitleEv + events[k].name; 
+        let eVal1 = document.getElementById('edit-val-1'); if(eVal1) eVal1.value = events[k].url || ""; 
+        let eLbl2 = document.getElementById('edit-lbl-2'); if(eLbl2) eLbl2.style.display = 'none'; 
+        let eVal2 = document.getElementById('edit-val-2'); if(eVal2) eVal2.style.display = 'none'; 
+    }
+}
+
+function closeEdit() { let eOvl = document.getElementById('edit-overlay'); if(eOvl) eOvl.style.display = 'none'; }
+
+function saveEdit() { 
+    const kEl = document.getElementById('edit-id'); const k = kEl ? kEl.value : ""; 
+    const tEl = document.getElementById('edit-type'); const type = tEl ? tEl.value : "";
+    if(!k) return;
+    if(type === 's') { 
+        let v1El = document.getElementById('edit-val-1'); if(v1El) sponsors[k].slurl = v1El.value; 
+        let v2El = document.getElementById('edit-val-2'); if(v2El) sponsors[k].mgr = v2El.value; 
+        localStorage.setItem('SLProSpons_v7', JSON.stringify(sponsors)); 
+    } else { 
+        let v1El = document.getElementById('edit-val-1'); if(v1El) events[k].url = v1El.value; 
+        localStorage.setItem('SLProEv_v7', JSON.stringify(events)); 
+    }
+    renderDB(); closeEdit();
+}
+
+function copyFlickr() { let rf = document.getElementById('render-f'); if(!rf) return; const cleanHTML = rf.innerHTML.replace(/<br>/g, '\n'); navigator.clipboard.writeText(cleanHTML); }
+
+async function copyText() {
+    if (!primfeedDataCache) return;
+    const plainContent = primfeedDataCache;
+    const htmlContent = primfeedDataCache.split('\n').map(line => {
+        if (line.trim() === '') return '<p><br></p>';
+        return `<p>${line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`;
+    }).join('');
+
+    const listener = function(e) {
+        e.clipboardData.setData('text/html', htmlContent);
+        e.clipboardData.setData('text/plain', plainContent);
+        e.preventDefault();
+    };
+    document.addEventListener('copy', listener); document.execCommand('copy'); document.removeEventListener('copy', listener);
+}
+
+function toggleTheme() { document.body.classList.toggle('light-theme'); }
+
+function openCatEdit(k) {
+    const catData = appCategories[k]; if (!catData) return;
+    let cOk = document.getElementById('cat-edit-old-key'); if(cOk) cOk.value = k;
+    let cId = document.getElementById('cat-edit-id'); if(cId) cId.value = k;
+    let cEn = document.getElementById('cat-edit-en'); if(cEn) cEn.value = catData.en || k;
+    let cEmo = document.getElementById('cat-edit-emo'); if(cEmo) cEmo.value = catData.emo || "🔹";
+    let cType = document.getElementById('cat-edit-type'); if(cType) cType.value = catData.type || "decors";
+    let cOvl = document.getElementById('cat-edit-overlay'); if(cOvl) cOvl.style.display = 'flex';
+}
+
+function closeCatEdit() { let cOvl = document.getElementById('cat-edit-overlay'); if(cOvl) cOvl.style.display = 'none'; }
+
+function saveCatEdit() {
+    const oldKeyEl = document.getElementById('cat-edit-old-key'); const oldKey = oldKeyEl ? oldKeyEl.value : "";
+    const newKeyEl = document.getElementById('cat-edit-id'); const newKey = newKeyEl ? newKeyEl.value.trim() : "";
+    const newEnEl = document.getElementById('cat-edit-en'); const newEn = newEnEl ? newEnEl.value.trim() : "";
+    const newEmoEl = document.getElementById('cat-edit-emo'); const newEmo = newEmoEl ? newEmoEl.value.trim() : "";
+    const newTypeEl = document.getElementById('cat-edit-type'); const newType = newTypeEl ? newTypeEl.value : "";
+
+    if (!newKey || !newEn) { alert(uiDictionary[currentLang].alertCatRequired); return; }
+    if (newKey !== oldKey) { delete appCategories[oldKey]; }
+    appCategories[newKey] = { emo: newEmo || "🔹", en: newEn, type: newType };
+    localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
+    closeCatEdit(); renderCustomCategories(); update();
+}
+
+function addCustomCategory() {
+    const fNameEl = document.getElementById('new-cat-id'); const fName = fNameEl ? fNameEl.value.trim() : "";
+    const eNameEl = document.getElementById('new-cat-en'); const eName = eNameEl ? eNameEl.value.trim() : "";
+    const emoEl = document.getElementById('new-cat-emo'); const emo = emoEl ? emoEl.value.trim() : "";
+    const typeEl = document.getElementById('new-cat-type'); const type = typeEl ? typeEl.value : "";
+    
+    if(!fName || !eName) return;
+    appCategories[fName] = { emo: emo || "🔹", en: eName, type: type };
+    localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
+    
+    if(fNameEl) fNameEl.value = ''; if(eNameEl) eNameEl.value = ''; if(emoEl) emoEl.value = '';
+    renderCustomCategories(); update();
+}
+
+function deleteCategory(k) {
+    const msg = uiDictionary[currentLang].confirmDelCat ? uiDictionary[currentLang].confirmDelCat.replace('{k}', k) : "Delete?";
+    if(!confirm(msg)) return;
+    delete appCategories[k];
+    localStorage.setItem('SLProCategories_v1', JSON.stringify(appCategories));
+    renderCustomCategories(); update();
+}
+
+function exportData() { 
+    let appModels = JSON.parse(localStorage.getItem('SLProModels_v1')) || {};
+    const blob = new Blob([JSON.stringify({ sponsors, events, deadlines, categories: appCategories, models: appModels, activeModel: activeModelKey, config: JSON.parse(localStorage.getItem('SLProCfg_v7')) }, null, 2)], {type: 'application/json'}); 
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_proflow.json`; a.click(); 
+}
+
+function importData(event) {
+    const file = event.target.files[0]; if (!file) return;
+    const reader = new FileReader(); reader.onload = (e) => {
+        const data = JSON.parse(e.target.result);
+        if(confirm(uiDictionary[currentLang].confirmImport)) {
+            localStorage.setItem('SLProSpons_v7', JSON.stringify(data.sponsors || {}));
+            localStorage.setItem('SLProEv_v7', JSON.stringify(data.events || {}));
+            localStorage.setItem('SLProDeadlines_v1', JSON.stringify(data.deadlines || []));
+            localStorage.setItem('SLProCategories_v1', JSON.stringify(data.categories || defaultCats));
+            localStorage.setItem('SLProModels_v1', JSON.stringify(data.models || {}));
+            localStorage.setItem('SLProActiveModel_v1', data.activeModel || "Modèle Standard (Diamants)");
+            localStorage.setItem('SLProCfg_v7', JSON.stringify(data.config || {}));
+            location.reload();
+        }
+    }; reader.readAsText(file);
+}
