@@ -539,9 +539,43 @@ const APP_VERSION = "1.3.18";
         navigator.clipboard.writeText(cleanHTML);
     }
     
-    function copyText() {
+    async function copyText() {
         if (!primfeedDataCache) return;
-        navigator.clipboard.writeText(primfeedDataCache);
+        
+        const plainContent = primfeedDataCache;
+        
+        // Transform plain text lines into clean HTML paragraphs so rich text editors (Tiptap/ProseMirror) preserve breaks
+        const htmlContent = primfeedDataCache
+            .split('\n')
+            .map(line => {
+                if (line.trim() === '') return '<p><br></p>';
+                const safeLine = line
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;');
+                return `<p>${safeLine}</p>`;
+            })
+            .join('');
+
+        try {
+            // Modern API method (works flawlessly on HTTPS / GitHub Pages)
+            const clipboardItem = new ClipboardItem({
+                'text/plain': new Blob([plainContent], { type: 'text/plain' }),
+                'text/html': new Blob([htmlContent], { type: 'text/html' })
+            });
+            await navigator.clipboard.write([clipboardItem]);
+        } catch (err) {
+            // ULTRA-ROBUST FALLBACK FOR LOCAL TESTING (file://)
+            // Intercepts the copy event to inject rich HTML even when browser permissions block the modern API locally
+            const listener = function(e) {
+                e.clipboardData.setData('text/html', htmlContent);
+                e.clipboardData.setData('text/plain', plainContent);
+                e.preventDefault();
+            };
+            document.addEventListener('copy', listener);
+            document.execCommand('copy');
+            document.removeEventListener('copy', listener);
+        }
     }
     function toggleTheme() { document.body.classList.toggle('light-theme'); }
     
