@@ -228,7 +228,7 @@ function applyLanguage() {
 
 function handleSmartInput(input, type) {
     const val = input.value.trim(); const row = input.closest('.dynamic-row'); if(!row) return;
-    const saveBtn = row.querySelector('.btn-save-express');
+    const saveBtn = input.closest('div').querySelector('.btn-save-express');
     if (lastKey === "Backspace" || lastKey === "Delete") return;
     const data = (type === 'spons') ? sponsors : events;
     const matchKey = Object.keys(data).find(k => k.startsWith(val.toLowerCase()));
