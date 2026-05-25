@@ -360,7 +360,7 @@ function update() {
     let hLinks = []; let pLinks = [];
     socialKeys.forEach(s => { if(cfg[s.id]) { hLinks.push(`<a href="${cfg[s.id]}">${s.label}</a>`); pLinks.push(`${s.label} (${cfg[s.id]})`); } });
 
-    let resSocialH = hLinks.join('\n'); let resSocialP = pLinks.join('\n');
+    let resSocialH = hLinks.join(' | '); let resSocialP = pLinks.join('\n');
 
     const tmEl = document.getElementById('tags-manual');
     const mt = tmEl ? tmEl.value.split(',').map(t=>t.trim().toLowerCase().replace(/\s+/g,'')).filter(t=>t) : [];
