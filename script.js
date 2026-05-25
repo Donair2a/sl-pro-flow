@@ -47,22 +47,49 @@ const uiDictionary = {
         editTitleSpons: "Editer : ", editTitleEv: "Editer : ", lblEditLink: "Lien / SLURL", lblEditMgr: "Manager", btnEditSubmit: "Enregistrer",
         modalTitleEditCat: "Modifier la Catégorie", lblModalCatFr: "Nom (Français)", lblModalCatEn: "Traduction (Anglais)", lblModalCatEmo: "Émoji", lblModalCatType: "Rangement / Type", btnModalCatSave: "Enregistrer", btnModalCatCancel: "Annuler",
         optModalStyle: "✨ Style", optModalDecors: "🏠 Décors", phCatFr: "Nom de la catégorie...", phCatEn: "Traduction anglaise...", phCatEmo: "Émoji...",
-        helpMainTitle: "📖 Guide d'Utilisation", btnCloseHelp: "Fermer le guide",
+        helpMainTitle: "📖 Manuel d'Utilisation", btnCloseHelp: "Fermer le guide",
         helpContent: `
             <div style="background:rgba(201,160,80,0.1); border:1px solid var(--accent); border-radius:8px; padding:15px; margin-bottom:15px;">
-                <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 Bienvenue sur SL Proflow</h3>
-                <p style="margin:0; font-size:0.85rem;">Outil conçu pour aider les blogueurs Second Life à <b>automatiser la rédaction de leurs crédits</b>. Renseignez votre formulaire, et le studio génère vos textes complets formatés pour Flickr et Primfeed.</p>
+                <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 À quoi sert SL ProFlow ?</h3>
+                <p style="margin:0; font-size:0.85rem;">Cette petite application vise à automatiser et sauvegarder vos paramètres de mise en forme et personnalisation ainsi la génération des crédits pour le blogging SL sur les plateformes Flickr et Primfeed. Les posts seront automatiquement copiés / collés en langue anglaise vous n’avez rien à traduire l’outil s’en occupe tout seul. Un gain de temps, et les crédits sont moins fastidieux voir même intuitifs. L’application est hébergée afin de rendre la maintenance plus facile, plus rapide.</p>
             </div>
-            <div class="qa-item" onclick="toggleQA('qa1_fr')">❓ Comment fonctionne l'auto-complétion ? <span>▼</span></div>
-            <div id="qa1_fr" class="qa-ans" style="display:none;">Dès que vous tapez 3 lettres d'une marque dans <b>Credits</b>, l'outil complète le reste. Si la marque est nouvelle, cliquez sur 💾 pour l'ajouter définitivement à votre base locale.</div>
-            <div class="qa-item" onclick="toggleQA('qa2_fr')">🔗 Comment gérer plusieurs liens par marque ? <span>▼</span></div>
-            <div id="qa2_fr" class="qa-ans" style="display:none;">Utilisez le séparateur <b>|</b> (barre verticale) dans le champ SLURL. L'outil créera automatiquement des liens numérotés <i>(Store 1 | Store 2)</i> traduits en anglais dans vos rendus finaux.</div>
-            <div class="qa-item" onclick="toggleQA('qa3_fr')">🌍 La traduction FR/EN modifie-t-elle mes crédits ? <span>▼</span></div>
-            <div id="qa3_fr" class="qa-ans" style="display:none;"><b>Non !</b> Le bouton ovale traduit uniquement l'interface de travail. Vos posts générés en bas de page resteront fixés en anglais, prêts pour vos publications.</div>
-            <div class="qa-item" onclick="toggleQA('qa4_fr')">⏳ Comment suivre mes Deadlines ? <span>▼</span></div>
-            <div id="qa4_fr" class="qa-ans" style="display:none;">Ajoutez vos échéances dans l'onglet dédié. Un code couleur vous indique l'urgence (Vert > 5j, Orange > 2j, Rouge = Alerte). Une pastille rouge apparaît sur le menu principal à moins de 48h.</div>
-            <div class="qa-item" onclick="toggleQA('qa5_fr')">💻 Installer l'application sur mon Bureau <span>▼</span></div>
-            <div id="qa5_fr" class="qa-ans" style="display:none;">Puisque l'outil est hébergé en ligne, installez-le comme un vrai logiciel :<br><br><b>Sur Chrome :</b> Cliquez sur le menu (3 points) &rarr; <i>Enregistrer et partager</i> &rarr; <b>Installer la page en tant qu'application...</b><br><b>Sur Edge :</b> Cliquez sur le menu (3 points) &rarr; <i>Applications</i> &rarr; <b>Installer ce site en tant qu'application</b>.</div>`
+            <div class="qa-item" onclick="toggleQA('qa1_fr')">🗺️ Barre de navigation supérieure <span>▼</span></div>
+            <div id="qa1_fr" class="qa-ans" style="display:none; font-size:0.85rem;">
+                <b>1. Crédits :</b> Ce menu vous donne accès à la mise en forme et la saisie de vos crédits. Vous pourrez y saisir le titre, le mood ainsi que partager vos liens musique. Il fonctionne avec un menu vertical (latéral gauche) qui vous permet de gérer la saisie des différents éléments de votre post.<br>
+                <b>2. Sponsors & Events :</b> Cette page est votre base de données d’events et de sponsors. Enregistrez-les directement sur cette page, ou depuis la saisie de votre poste (Style/Décors) via la disquette 💾 qui apparaît pour un ajout automatique.<br>
+                <b>3. Deadlines :</b> Gérez vos Deadlines et gardez un suivi visuel à court terme. Saisie manuelle (Sponsor + Date). Code couleur : Vert (+ de 5 jours), Orange (+ de 2 jours), Rouge (- de 48h avec alerte sur le menu).<br>
+                <b>4. ? :</b> Guide utilisateur complet.<br>
+                <b>5. Langage Fr/En :</b> Permet de basculer instantanément la langue de l'interface.<br>
+                <b>6. Tableau de bord :</b> Réseaux sociaux, tags permanents, catégories personnalisées, modèles de structure et module de backup.<br>
+                <b>7. Thème :</b> Thème sombre et clair.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa2_fr')">📐 Menu latéral gauche (Le Formulateur) <span>▼</span></div>
+            <div id="qa2_fr" class="qa-ans" style="display:none; font-size:0.85rem;">
+                Ces onglets sont entièrement dédiés à la saisie de votre post. Ils vous permettent d’afficher ou non différents blocs positionnés selon vos envies. L’outil est intelligent : tapez les 3 premiers caractères d’un sponsor enregistré et les champs s’auto-remplissent.<br><br>
+                • <b>Style :</b> Principalement lié à ce que porte l’avatar (vêtements, corps, accessoires tenus en main). Entièrement personnalisable dans le tableau de bord.<br>
+                • <b>Décors :</b> Centré sur ce qui accompagne l’avatar (backdrop, ami, meubles, végétation, poses). Également personnalisable.<br>
+                • <b>Technique :</b> Pour le post-traitement (Logiciel utilisé, Viewer utilisé et champ libre pour précisions).<br>
+                • <b>Tags :</b> Divisé en trois parties : Tags permanents (Tableau de bord), Auto-tags suggérés (selon les sponsors saisis) et champ de Saisie manuelle. À copier-coller directement sur Flickr.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa3_fr')">🔗 Astuces & Gestion des Liens Multiples <span>▼</span></div>
+            <div id="qa3_fr" class="qa-ans" style="display:none; font-size:0.85rem;">
+                Vous pouvez saisir plusieurs adresses pour votre sponsor : il suffit de séparer celles-ci par des séparateurs <b>|</b> (barre verticale). L’outil va créer automatiquement les liens sous la référence numérotée en anglais : <i>Store 1, Store 2...</i> dans vos rendus finaux.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa4_fr')">🎨 Personnalisation des Catégories & Modèles <span>▼</span></div>
+            <div id="qa4_fr" class="qa-ans" style="display:none; font-size:0.85rem;">
+                • <b>Catégories :</b> Dans le Tableau de bord, modifiez ou ajoutez des items dans vos menus déroulants Style et Décors pour coller à vos habitudes.<br>
+                • <b>Modèles :</b> Organisez votre structure de posts ou utilisez celle par défaut. Utilisez les boutons d'injection de balises pour placer vos blocs où vous le voulez. Pour écraser un modèle existant : faites vos modifications, remettez le nom exact du modèle dans la case Nom, et cliquez sur <b>Créer / Modifier</b>.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa5_fr')">💾 Maintenance & Backup (Crucial !) <span>▼</span></div>
+            <div id="qa5_fr" class="qa-ans" style="display:none; font-size:0.85rem;">
+                Cette fonction est très importante ! Elle vous permet d'enregistrer sur votre PC toutes vos données sous format de fichier JSON (Modèles, Catégories, Sponsors, Tags). Il est très important après chaque modification d'exporter vos données. Si vous perdez vos personnalisations (changement de PC, cache vidé), réimportez ce fichier et la magie opère !
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa6_fr')">💻 Installer l'application sur son Bureau <span>▼</span></div>
+            <div id="qa6_fr" class="qa-ans" style="display:none; font-size:0.85rem;">
+                Puisque l'outil est hébergé en ligne, installez-le comme un vrai logiciel :<br><br>
+                • <b>Sur Chrome :</b> Cliquez sur le menu (3 points) &rarr; <i>Enregistrer et partager</i> &rarr; <b>Installer la page en tant qu'application...</b><br>
+                • <b>Sur Edge :</b> Cliquez sur le menu (3 points) &rarr; <i>Applications</i> &rarr; <b>Installer ce site en tant qu'application</b>.
+            </div>`
     },
     EN: {
         navEditor: "Credits", navSponsors: "Sponsors & Events", navDl: "Deadlines", navConfig: "Dashboard",
@@ -88,19 +115,46 @@ const uiDictionary = {
         helpMainTitle: "📖 User Manual", btnCloseHelp: "Close guide",
         helpContent: `
             <div style="background:rgba(201,160,80,0.1); border:1px solid var(--accent); border-radius:8px; padding:15px; margin-bottom:15px;">
-                <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 Welcome to SL Proflow</h3>
-                <p style="margin:0; font-size:0.85rem;">Application designed to help Second Life bloggers <b>automate their credits formatting</b>. Fill out the form, and the studio instantly generates formatted text tailored for Flickr and Primfeed.</p>
+                <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 What is SL ProFlow?</h3>
+                <p style="margin:0; font-size:0.85rem;">This small application aims to automate and save your formatting and personalization settings as well as the generation of credits for SL blogging on Flickr and Primfeed platforms. Posts will be automatically copied / pasted in English, you do not have to translate anything, the tool handles it all on its own. A real time saver, making credits less tedious and highly intuitive. The application is hosted online to make maintenance faster and easier.</p>
             </div>
-            <div class="qa-item" onclick="toggleQA('qa1_en')">❓ How does intelligent auto-completion work? <span>▼</span></div>
-            <div id="qa1_en" class="qa-ans" style="display:none;">Type 3 letters of a brand in <b>Credits</b>, and the tool autofills the rest. If it's a new brand, click 💾 to quickly save it to your local database.</div>
-            <div class="qa-item" onclick="toggleQA('qa2_en')">🔗 How do I process multiple links per brand? <span>▼</span></div>
-            <div id="qa2_en" class="qa-ans" style="display:none;">Use the separator <b>|</b> (vertical bar) in the SLURL field. The system will neatly compile numbered hyperlinks <i>(Store 1 | Store 2)</i> in your final copy.</div>
-            <div class="qa-item" onclick="toggleQA('qa3_en')">🌍 Does the UI language toggle change my posts? <span>▼</span></div>
-            <div id="qa3_en" class="qa-ans" style="display:none;"><b>No!</b> The oval toggle translates only your working environment. Generated text grids at the bottom will constantly be compiled in structural English.</div>
-            <div class="qa-item" onclick="toggleQA('qa4_en')">⏳ How to track my blogging assignments? <span>▼</span></div>
-            <div id="qa4_en" class="qa-ans" style="display:none;">Manage due dates in the Deadlines tab. Status colors show urgency (Green > 5d, Orange > 2d, Red = Alert). A persistent red badge pins to the menu at < 48h.</div>
-            <div class="qa-item" onclick="toggleQA('qa5_en')">💻 Installing app to Desktop (PWA) <span>▼</span></div>
-            <div id="qa5_en" class="qa-ans" style="display:none;">Run SL Proflow as a standalone native app:<br><br><b>On Chrome:</b> Click menu (3 dots) &rarr; <i>Save and share</i> &rarr; <b>Install page as app...</b><br><b>On Edge:</b> Click menu (3 dots) &rarr; <i>Apps</i> &rarr; <b>Install this site as an app</b>.</div>`
+            <div class="qa-item" onclick="toggleQA('qa1_en')">🗺️ Top Navigation Bar <span>▼</span></div>
+            <div id="qa1_en" class="qa-ans" style="display:none; font-size:0.85rem;">
+                <b>1. Credits:</b> Gives access to your main credits form layout. Enter title, quotes/mood, and share your music links. Works with a vertical left sidebar layout to manage input elements.<br>
+                <b>2. Sponsors & Events:</b> Your local asset database. Register them here directly or via the disk icon 💾 appearing on the entry forms for automated quick-saves.<br>
+                <b>3. Deadlines:</b> Visual short-term tracking for commitments. Manual inputs (Sponsor + Date). Color system: Green (+5 days), Orange (+2 days), Red (<48h with main header badge notification alert).<br>
+                <b>4. ?:</b> Comprehensive bilingual user manual.<br>
+                <b>5. Language Fr/En:</b> Instantly toggles the working user interface language.<br>
+                <b>6. Dashboard:</b> Personal social networks, permanent tags, custom input categories, structural layout models, and full JSON local backup utilities.<br>
+                <b>7. Theme:</b> Easily switch between Dark and Light mode.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa2_en')">📐 Left Sidebar (The Formulator) <span>▼</span></div>
+            <div id="qa2_en" class="qa-ans" style="display:none; font-size:0.85rem;">
+                These tabs are completely dedicated to formatting your credits. Toggle input sections according to your layout preferences. Built-in smart autocomplete feature: type the first 3 letters of any saved sponsor to autofill stored SLURLs and managers.<br><br>
+                • <b>Style:</b> Tied to your avatar's look (outfit, body, hair, held accessories). Fully customizable via the dashboard setup.<br>
+                • <b>Decors:</b> Focused on the surroundings (backdrop, friends, furniture, vegetation, poses). Fully customizable.<br>
+                • <b>Technical:</b> Share post-processing specifications (software used, viewer choice, and open notes field).<br>
+                • <b>Tags:</b> Split into 3 layers: Permanent tags, smart suggested Auto-tags (based on input brands), and a Manual entries layer. Formatted to paste natively into Flickr.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa3_en')">🔗 Multi-Link Routing & Pipes <span>▼</span></div>
+            <div id="qa3_en" class="qa-ans" style="display:none; font-size:0.85rem;">
+                You can feed multiple URLs into a single sponsor field by simply joining them using a vertical bar separator <b>|</b>. The script compiles them into clean numbered structural English links: <i>Store 1, Store 2...</i> in your compiled publications.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa4_en')">🎨 Customizing Categories & Layout Models <span>▼</span></div>
+            <div id="qa4_en" class="qa-ans" style="display:none; font-size:0.85rem;">
+                • <b>Categories:</b> Delete or add items inside your Style and Decors dropdown menus through the main configuration view.<br>
+                • <b>Models:</b> Craft unique presentation designs or run defaults. Use script block injectors to wire tokens anywhere. To overwrite an active template structure: make updates, put the exact model name back inside the Name field, and press <b>Create / Update</b>.
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa5_en')">💾 Crucial Backup & Maintenance Utilities <span>▼</span></div>
+            <div id="qa5_en" class="qa-ans" style="display:none; font-size:0.85rem;">
+                This function is extremely important! It lets you download a local JSON backup file to your computer containing everything (templates, custom categories, sponsors, defaults). Always export your profile after modifications. If you clear browser caches or switch devices, reload this file to instantly recover your studio!
+            </div>
+            <div class="qa-item" onclick="toggleQA('qa6_en')">💻 Running App from Desktop (PWA Install) <span>▼</span></div>
+            <div id="qa6_en" class="qa-ans" style="display:none; font-size:0.85rem;">
+                Since the tool runs on an online server, install it standalone just like native PC software:<br><br>
+                • <b>On Chrome:</b> Open menu (3 dots) &rarr; <i>Save and share</i> &rarr; <b>Install page as app...</b><br>
+                • <b>On Edge:</b> Open menu (3 dots) &rarr; <i>Apps</i> &rarr; <b>Install this site as an app</b>.
+            </div>`
     }
 };
 
