@@ -74,6 +74,25 @@
             margin-bottom: 15px;
             border-left: 3px solid var(--accent);
         }
+
+        /* BOUTON NOUVEAU - FORCE COULEUR VERTE */
+        button#side-btn-clear.btn-clear {
+            background-color: #50c878 !important; /* Vert émeraude */
+            color: #ffffff !important;
+            border-color: #50c878 !important;
+        }
+        button#side-btn-clear.btn-clear:hover {
+            background-color: #3eb665 !important;
+            border-color: #3eb665 !important;
+        }
+        html body.light-theme button#side-btn-clear.btn-clear {
+            background-color: #228b22 !important; /* Vert forêt */
+            border-color: #228b22 !important;
+        }
+        html body.light-theme button#side-btn-clear.btn-clear:hover {
+            background-color: #1a6b1a !important;
+            border-color: #1a6b1a !important;
+        }
     </style>
 </head>
 <body>
@@ -212,6 +231,8 @@
                         <input type="text" id="cfg-fb" placeholder="Facebook (URL)" oninput="saveCfg()">
                         <input type="text" id="cfg-x" placeholder="X (URL)" oninput="saveCfg()">
                         <input type="text" id="cfg-tk" placeholder="TikTok (URL)" oninput="saveCfg()">
+                        <input type="text" id="cfg-rm" placeholder="ReezMe (URL)" oninput="saveCfg()">
+                        <input type="text" id="cfg-sp" placeholder="SecondPix (URL)" oninput="saveCfg()">
                     </div>
                     <label id="lbl-cfg-tags">Tags par défaut (permanents)</label>
                     <textarea id="cfg-tags" rows="3" oninput="saveCfg()"></textarea>

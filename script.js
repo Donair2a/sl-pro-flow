@@ -53,16 +53,16 @@ const uiDictionary = {
                 <h3 style="color:var(--accent); margin-top:0; margin-bottom:8px; font-size:1rem;">👋 Bienvenue sur SL Proflow</h3>
                 <p style="margin:0; font-size:0.85rem;">Outil conçu pour aider les blogueurs Second Life à <b>automatiser la rédaction de leurs crédits</b>. Renseignez votre formulaire, et le studio génère vos textes complets formatés pour Flickr et Primfeed.</p>
             </div>
-            <div class="qa-item" onclick="toggleQA('qa1')">❓ Comment fonctionne l'auto-complétion ? <span>▼</span></div>
-            <div id="qa1" class="qa-ans" style="display:none;">Dès que vous tapez 3 lettres d'une marque dans <b>Credits</b>, l'outil complète le reste. Si la marque est nouvelle, cliquez sur 💾 pour l'ajouter définitivement à votre base locale.</div>
-            <div class="qa-item" onclick="toggleQA('qa2')">🔗 Comment gérer plusieurs liens par marque ? <span>▼</span></div>
-            <div id="qa2" class="qa-ans" style="display:none;">Utilisez le séparateur <b>|</b> (barre verticale) dans le champ SLURL. L'outil créera automatiquement des liens numérotés <i>(Store 1 | Store 2)</i> traduits en anglais dans vos rendus finaux.</div>
-            <div class="qa-item" onclick="toggleQA('qa3')">🌍 La traduction FR/EN modifie-t-elle mes crédits ? <span>▼</span></div>
-            <div id="qa3" class="qa-ans" style="display:none;"><b>Non !</b> Le bouton ovale traduit uniquement l'interface de travail. Vos posts générés en bas de page resteront fixés en anglais, prêts pour vos publications.</div>
-            <div class="qa-item" onclick="toggleQA('qa4')">⏳ Comment suivre mes Deadlines ? <span>▼</span></div>
-            <div id="qa4" class="qa-ans" style="display:none;">Ajoutez vos échéances dans l'onglet dédié. Un code couleur vous indique l'urgence (Vert > 5j, Orange > 2j, Rouge = Alerte). Une pastille rouge apparaît sur le menu principal à moins de 48h.</div>
-            <div class="qa-item" onclick="toggleQA('qa5')">💻 Installer l'application sur mon Bureau <span>▼</span></div>
-            <div id="qa5" class="qa-ans" style="display:none;">Puisque l'outil est hébergé en ligne, installez-le comme un vrai logiciel :<br><br><b>Sur Chrome :</b> Cliquez sur le menu (3 points) &rarr; <i>Enregistrer et partager</i> &rarr; <b>Installer la page en tant qu'application...</b><br><b>Sur Edge :</b> Cliquez sur le menu (3 points) &rarr; <i>Applications</i> &rarr; <b>Installer ce site en tant qu'application</b>.</div>`
+            <div class="qa-item" onclick="toggleQA('qa1_fr')">❓ Comment fonctionne l'auto-complétion ? <span>▼</span></div>
+            <div id="qa1_fr" class="qa-ans" style="display:none;">Dès que vous tapez 3 lettres d'une marque dans <b>Credits</b>, l'outil complète le reste. Si la marque est nouvelle, cliquez sur 💾 pour l'ajouter définitivement à votre base locale.</div>
+            <div class="qa-item" onclick="toggleQA('qa2_fr')">🔗 Comment gérer plusieurs liens par marque ? <span>▼</span></div>
+            <div id="qa2_fr" class="qa-ans" style="display:none;">Utilisez le séparateur <b>|</b> (barre verticale) dans le champ SLURL. L'outil créera automatiquement des liens numérotés <i>(Store 1 | Store 2)</i> traduits en anglais dans vos rendus finaux.</div>
+            <div class="qa-item" onclick="toggleQA('qa3_fr')">🌍 La traduction FR/EN modifie-t-elle mes crédits ? <span>▼</span></div>
+            <div id="qa3_fr" class="qa-ans" style="display:none;"><b>Non !</b> Le bouton ovale traduit uniquement l'interface de travail. Vos posts générés en bas de page resteront fixés en anglais, prêts pour vos publications.</div>
+            <div class="qa-item" onclick="toggleQA('qa4_fr')">⏳ Comment suivre mes Deadlines ? <span>▼</span></div>
+            <div id="qa4_fr" class="qa-ans" style="display:none;">Ajoutez vos échéances dans l'onglet dédié. Un code couleur vous indique l'urgence (Vert > 5j, Orange > 2j, Rouge = Alerte). Une pastille rouge apparaît sur le menu principal à moins de 48h.</div>
+            <div class="qa-item" onclick="toggleQA('qa5_fr')">💻 Installer l'application sur mon Bureau <span>▼</span></div>
+            <div id="qa5_fr" class="qa-ans" style="display:none;">Puisque l'outil est hébergé en ligne, installez-le comme un vrai logiciel :<br><br><b>Sur Chrome :</b> Cliquez sur le menu (3 points) &rarr; <i>Enregistrer et partager</i> &rarr; <b>Installer la page en tant qu'application...</b><br><b>Sur Edge :</b> Cliquez sur le menu (3 points) &rarr; <i>Applications</i> &rarr; <b>Installer ce site en tant qu'application</b>.</div>`
     },
     EN: {
         navEditor: "Credits", navSponsors: "Sponsors & Events", navDl: "Deadlines", navConfig: "Dashboard",
@@ -356,7 +356,7 @@ function update() {
         if(note) { resSettingsH += `📝 <b>Notes</b> : ${note}\n`; resSettingsP += `📝 Notes : ${note}\n`; }
     }
 
-    const socialKeys = [{id:'f',label:'Flickr'},{id:'p',label:'Primfeed'},{id:'i',label:'Instagram'},{id:'fb',label:'Facebook'},{id:'x',label:'X'},{id:'tk',label:'Tiktok'}];
+    const socialKeys = [{id:'f',label:'Flickr'},{id:'p',label:'Primfeed'},{id:'i',label:'Instagram'},{id:'fb',label:'Facebook'},{id:'x',label:'X'},{id:'tk',label:'Tiktok'},{id:'rm',label:'ReezMe'},{id:'sp',label:'SecondPix'}];
     let hLinks = []; let pLinks = [];
     socialKeys.forEach(s => { if(cfg[s.id]) { hLinks.push(`<a href="${cfg[s.id]}">${s.label}</a>`); pLinks.push(`${s.label} (${cfg[s.id]})`); } });
 
@@ -433,14 +433,14 @@ function update() {
 }
 
 function saveCfg() { 
-    let d = {}; ["f","p","i","fb","x","tk"].forEach(k => { let el = document.getElementById('cfg-'+k); d[k] = el ? el.value : ""; }); 
+    let d = {}; ["f","p","i","fb","x","tk","rm","sp"].forEach(k => { let el = document.getElementById('cfg-'+k); d[k] = el ? el.value : ""; }); 
     let tEl = document.getElementById('cfg-tags'); d.tags = tEl ? tEl.value : ""; 
     localStorage.setItem('SLProCfg_v7', JSON.stringify(d)); update(); 
 }
 
 function loadCfg() { 
     const d = JSON.parse(localStorage.getItem('SLProCfg_v7')); 
-    if(d) { ["f","p","i","fb","x","tk"].forEach(k => { let el = document.getElementById('cfg-'+k); if(el) el.value = d[k] || ''; }); 
+    if(d) { ["f","p","i","fb","x","tk","rm","sp"].forEach(k => { let el = document.getElementById('cfg-'+k); if(el) el.value = d[k] || ''; }); 
     let tEl = document.getElementById('cfg-tags'); if(tEl) tEl.value = d.tags || ''; update(); } 
 }
 
@@ -451,7 +451,7 @@ function clearForm() {
         let dcEl = document.getElementById('decors-container'); if(dcEl) dcEl.innerHTML = ''; 
         const radioViNone = document.querySelector('input[name="vi"][value=""]'); if(radioViNone) radioViNone.checked = true;
         const radioSoftNone = document.querySelector('input[name="soft"][value=""]'); if(radioSoftNone) radioSoftNone.checked = true;
-        ["f","p","i","fb","x","tk"].forEach(k => { let el = document.getElementById('cfg-'+k); if(el) el.value = ''; });
+        ["f","p","i","fb","x","tk","rm","sp"].forEach(k => { let el = document.getElementById('cfg-'+k); if(el) el.value = ''; });
         let ctEl = document.getElementById('cfg-tags'); if(ctEl) ctEl.value = '';
         saveCfg(); update(); 
     } 
